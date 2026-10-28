@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Portals — Prototype</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #0a0a0f;
+      --border: #1a1b26;
+      --accent: #7aa2f7;
+      --text: #a9b1d6;
+      --muted: #565f89;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      user-select: none;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .toggles {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(122, 162, 247, 0.08);
+    }
+    .portal-grid {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .portal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .portal-card:hover {
+      border-color: #2f334d;
+    }
+    .portal-card.playing {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(122, 162, 247, 0.08);
+    }
+    .portal-info h2 {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #c0caf5;
+      margin-bottom: 4px;
+    }
+    .portal-info span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .portal-card.playing .status-dot {
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    #stage-readout {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      height: 20px;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>DREAM PORTALS</h1>
+    <p>Tap a destination and close your eyes</p>
+  </div>
+
+  <!-- Optional Pre-Flight Add-On Toggles -->
+  <div class="toggles">
+    <button class="pill" onclick="this.classList.toggle('active')">+ 3m Body Unwind</button>
+    <button class="pill" onclick="this.classList.toggle('active')">+ 5m Mind Shuffle</button>
+  </div>
+
+  <!-- Portal Cards -->
+  <div class="portal-grid">
+    <div class="portal-card" id="moon-bus-card" onclick="togglePortal()">
+      <div class="portal-info">
+        <h2>🚌 Bus to the Moon</h2>
+        <span>Sub-bass cabin hum • Theta wave drift</span>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+  </div>
+
+  <div id="stage-readout">Ready for departure</div>
+
+  <script>
+    let audioCtx = null;
+    let isPlaying = false;
+    let ambientNodes = [];
+    let currentVoiceSource = null;
+    let timerId = null;
+
+    const DRIFT_CLIPS = ['drift_1', 'drift_2', 'drift_3', 'drift_4', 'drift_5', 'drift_6'];
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Procedurally synthesizes the Lunar Bus cabin drone + 4Hz Theta Binaural Beat
+    function startLunarBusSoundscape() {
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 4); // 4s warm fade-in
+      masterGain.connect(audioCtx.destination);
+
+      // 1. Deep 55Hz Engine Sub-Bass Hum
+      const subOsc = audioCtx.createOscillator();
+      subOsc.type = 'sine';
+      subOsc.frequency.value = 55;
+      subOsc.connect(masterGain);
+      subOsc.start();
+
+      // 2. Binaural Theta Beat (110Hz Left Ear / 114Hz Right Ear = 4Hz Dream State)
+      const merger = audioCtx.createChannelMerger(2);
+      const leftOsc = audioCtx.createOscillator();
+      const rightOsc = audioCtx.createOscillator();
+      const binauralGain = audioCtx.createGain();
+      binauralGain.gain.value = 0.08;
+
+      leftOsc.frequency.value = 110;
+      rightOsc.frequency.value = 114;
+      leftOsc.connect(merger, 0, 0);
+      rightOsc.connect(merger, 0, 1);
+      merger.connect(binauralGain);
+      binauralGain.connect(masterGain);
+
+      leftOsc.start();
+      rightOsc.start();
+
+      ambientNodes = [subOsc, leftOsc, rightOsc, masterGain];
+    }
+
+    // Plays a single Kokoro WAV file through a 2800Hz Low-Pass Warmth Filter
+    async function playVoiceClip(clipName, volume = 0.85) {
+      if (!isPlaying) return;
+      try {
+        const response = await fetch(`audio/moon_bus/${clipName}.wav`);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        return new Promise((resolve) => {
+          if (!isPlaying) return resolve();
+
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffer;
+
+          // Roll off harsh high frequencies so the AI voice sounds warm at 2 AM
+          const lowpass = audioCtx.createBiquadFilter();
+          lowpass.type = 'lowpass';
+          lowpass.frequency.value = 2800;
+
+          const voiceGain = audioCtx.createGain();
+          voiceGain.gain.value = volume;
+
+          source.connect(lowpass);
+          lowpass.connect(voiceGain);
+          voiceGain.connect(audioCtx.destination);
+
+          currentVoiceSource = source;
+          source.onended = () => resolve();
+          source.start();
+        });
+      } catch (e) {
+        console.warn(`Could not load audio/moon_bus/${clipName}.wav. Run generate_moon_bus.py first!`);
+      }
+    }
+
+    function waitSeconds(sec) {
+      return new Promise((resolve) => {
+        timerId = setTimeout(resolve, sec * 1000);
+      });
+    }
+
+    async function runPortalSequence() {
+      const readout = document.getElementById('stage-readout');
+
+      // Phase 1: Departure
+      readout.textContent = "Phase 1: Boarding & Grounding...";
+      await waitSeconds(3);
+      await playVoiceClip('departure', 0.85);
+
+      // Phase 2: Shuffled Modular Drift (with 14-second silence gaps)
+      const tonightScenes = shuffle(DRIFT_CLIPS);
+      for (let i = 0; i < tonightScenes.length; i++) {
+        if (!isPlaying) return;
+        readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${tonightScenes.length}) — Ambient Pause`;
+        await waitSeconds(14);
+        if (!isPlaying) return;
+        readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${tonightScenes.length})`;
+        await playVoiceClip(tonightScenes[i], 0.78);
+      }
+
+      // Phase 3: Lucid Seed (Quieter voice after a 20-second pause)
+      if (!isPlaying) return;
+      readout.textContent = "Phase 3: Deepening Hypnagogia...";
+      await waitSeconds(20);
+      if (!isPlaying) return;
+      readout.textContent = "Phase 3: Planting Lucid Seed...";
+      await playVoiceClip('lucid_seed', 0.55);
+
+      // Phase 4: Pure Soundscape Fade
+      if (!isPlaying) return;
+      readout.textContent = "Phase 4: Pure Soundscape Drift";
+    }
+
+    function togglePortal() {
+      const card = document.getElementById('moon-bus-card');
+      const readout = document.getElementById('stage-readout');
+
+      if (isPlaying) {
+        isPlaying = false;
+        card.classList.remove('playing');
+        readout.textContent = "Session paused";
+        if (currentVoiceSource) currentVoiceSource.stop();
+        clearTimeout(timerId);
+        if (audioCtx) audioCtx.close();
+        return;
+      }
+
+      isPlaying = true;
+      card.classList.add('playing');
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      startLunarBusSoundscape();
+      runPortalSequence();
+    }
+  </script>
+</body>
+</html>
