@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dream Portals — Immersive Ambient Journeys</title>
-  <meta name="description" content="Ten atmospheric ambient journeys, from a bus to the moon to a deep-sea observatory. Choose a portal and explore its soundscape." />
+  <meta name="description" content="Ten atmospheric ambient journeys, from a bus to the moon to a desert pavilion, a lighthouse watch-room, an attic library, and a nebula cruiser. Choose a portal and explore its soundscape." />
   <meta name="theme-color" content="#000000" />
   <link rel="canonical" href="https://loganxaaryan-a11y.github.io/dream-portals/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Dream Portals — Immersive Ambient Journeys" />
-  <meta property="og:description" content="Ten atmospheric ambient journeys. Choose a portal and explore its soundscape." />
+  <meta property="og:description" content="Ten atmospheric ambient journeys, from a desert pavilion to a nebula cruiser. Choose a portal and explore its soundscape." />
   <meta property="og:url" content="https://loganxaaryan-a11y.github.io/dream-portals/" />
   <meta name="twitter:card" content="summary" />
   <style>
@@ -166,27 +166,27 @@
       box-shadow: 0 0 12px #7dcfff;
     }
     .portal-card.sailboat.playing::before { background: #7dcfff; }
-    .portal-card.thermal.playing { border-color: #ff9a7a; box-shadow: 0 0 25px rgba(255,154,122,0.08); }
-    .portal-card.thermal.playing .status-dot { background: #ff9a7a; box-shadow: 0 0 12px #ff9a7a; }
-    .portal-card.thermal.playing::before { background: #ff9a7a; }
+    .portal-card.desert.playing { border-color: #e09a5a; box-shadow: 0 0 25px rgba(224,154,90,0.08); }
+    .portal-card.desert.playing .status-dot { background: #e09a5a; box-shadow: 0 0 12px #e09a5a; }
+    .portal-card.desert.playing::before { background: #e09a5a; }
     .portal-card.airship.playing { border-color: #c0a0ff; box-shadow: 0 0 25px rgba(192,160,255,0.08); }
     .portal-card.airship.playing .status-dot { background: #c0a0ff; box-shadow: 0 0 12px #c0a0ff; }
     .portal-card.airship.playing::before { background: #c0a0ff; }
-    .portal-card.deepsea.playing { border-color: #4db8ff; box-shadow: 0 0 25px rgba(77,184,255,0.08); }
-    .portal-card.deepsea.playing .status-dot { background: #4db8ff; box-shadow: 0 0 12px #4db8ff; }
-    .portal-card.deepsea.playing::before { background: #4db8ff; }
-    .portal-card.library.playing { border-color: #e8c07a; box-shadow: 0 0 25px rgba(232,192,122,0.08); }
-    .portal-card.library.playing .status-dot { background: #e8c07a; box-shadow: 0 0 12px #e8c07a; }
-    .portal-card.library.playing::before { background: #e8c07a; }
+    .portal-card.lighthouse.playing { border-color: #ffd166; box-shadow: 0 0 25px rgba(255,209,102,0.08); }
+    .portal-card.lighthouse.playing .status-dot { background: #ffd166; box-shadow: 0 0 12px #ffd166; }
+    .portal-card.lighthouse.playing::before { background: #ffd166; }
+    .portal-card.attic.playing { border-color: #e8c07a; box-shadow: 0 0 25px rgba(232,192,122,0.08); }
+    .portal-card.attic.playing .status-dot { background: #e8c07a; box-shadow: 0 0 12px #e8c07a; }
+    .portal-card.attic.playing::before { background: #e8c07a; }
     .portal-card.snowpiercer.playing { border-color: #a0d8ff; box-shadow: 0 0 25px rgba(160,216,255,0.08); }
     .portal-card.snowpiercer.playing .status-dot { background: #a0d8ff; box-shadow: 0 0 12px #a0d8ff; }
     .portal-card.snowpiercer.playing::before { background: #a0d8ff; }
     .portal-card.lantern.playing { border-color: #ffb86b; box-shadow: 0 0 25px rgba(255,184,107,0.08); }
     .portal-card.lantern.playing .status-dot { background: #ffb86b; box-shadow: 0 0 12px #ffb86b; }
     .portal-card.lantern.playing::before { background: #ffb86b; }
-    .portal-card.greenhouse.playing { border-color: #8fe8a0; box-shadow: 0 0 25px rgba(143,232,160,0.08); }
-    .portal-card.greenhouse.playing .status-dot { background: #8fe8a0; box-shadow: 0 0 12px #8fe8a0; }
-    .portal-card.greenhouse.playing::before { background: #8fe8a0; }
+    .portal-card.nebula.playing { border-color: #a78bfa; box-shadow: 0 0 25px rgba(167,139,250,0.08); }
+    .portal-card.nebula.playing .status-dot { background: #a78bfa; box-shadow: 0 0 12px #a78bfa; }
+    .portal-card.nebula.playing::before { background: #a78bfa; }
     #stage-readout {
       margin-top: 32px;
       font-size: 0.85rem;
@@ -250,10 +250,10 @@
       <div class="status-dot"></div>
     </div>
 
-    <div class="portal-card thermal" id="thermal-card" onclick="togglePortal('thermal')">
+    <div class="portal-card desert" id="desert-card" onclick="togglePortal('desert_caravan')">
       <div class="portal-info">
-        <h2>♨️ High-Altitude Thermal Springs</h2>
-        <span>Warm water wash • Winter crickets • Snow hush</span>
+        <h2>🏜️ Desert Star-Dune Pavilion</h2>
+        <span>Dry sand breeze • Warm canvas • Night stars</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -266,18 +266,18 @@
       <div class="status-dot"></div>
     </div>
 
-    <div class="portal-card deepsea" id="deepsea-card" onclick="togglePortal('deep_sea')">
+    <div class="portal-card lighthouse" id="lighthouse-card" onclick="togglePortal('lighthouse_watch')">
       <div class="portal-info">
-        <h2>🌊 Deep Sea Observatory</h2>
-        <span>Tidal surge • Silt hush • Deep hum</span>
+        <h2>🗼 Cliffside Lighthouse Watch-Room</h2>
+        <span>Distant surf • Stone tower • Slow light sweep</span>
       </div>
       <div class="status-dot"></div>
     </div>
 
-    <div class="portal-card library" id="library-card" onclick="togglePortal('library')">
+    <div class="portal-card attic" id="attic-card" onclick="togglePortal('attic_library')">
       <div class="portal-info">
-        <h2>📚 Midnight Library Elevator</h2>
-        <span>Cable hum • Rain on glass • Hearth crackle</span>
+        <h2>📚 Attic Rain-Loft Library</h2>
+        <span>Skylight rain • Hearth embers • Old books</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -293,15 +293,15 @@
     <div class="portal-card lantern" id="lantern-card" onclick="togglePortal('lantern')">
       <div class="portal-info">
         <h2>🏮 Lantern Canal</h2>
-        <span>Oar dip • Canal lap • Crickets &amp; frogs</span>
+        <span>Oar dip • Canal lap • Night air</span>
       </div>
       <div class="status-dot"></div>
     </div>
 
-    <div class="portal-card greenhouse" id="greenhouse-card" onclick="togglePortal('greenhouse')">
+    <div class="portal-card nebula" id="nebula-card" onclick="togglePortal('nebula_cruiser')">
       <div class="portal-info">
-        <h2>🌿 Orbital Glasshouse Conservatory</h2>
-        <span>Dome hum • Misting • Stone rill</span>
+        <h2>✨ Deep-Space Nebula Cruiser</h2>
+        <span>Beatless dust wash • Warm cabin air • Starlight</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -336,14 +336,15 @@
     let sailboatWindGainNode = null;
     let sailboatCabinGainNode = null;
     let sailboatCreakTimeoutId = null;
-    let thermalWaterGainNode = null, thermalSnowGainNode = null, thermalCabinGainNode = null, thermalCricketTimeoutId = null;
+    let desertBreezeGainNode = null, desertEarthGainNode = null, desertBillowTimeoutId = null;
     let airshipCreakTimeoutId = null, airshipPropGainNode = null, airshipMistGainNode = null, airshipWarmGainNode = null;
-    let deepSurgeGainNode = null, deepSiltGainNode = null, deepCabinGainNode = null, deepSurgeTimeoutId = null, deepCanyonTimeoutId = null;
-    let libraryHumGainNode = null, libraryRainGainNode = null, libraryRainFilterNode = null, libraryFloorTimeoutId = null, libraryHearthTimeoutId = null;
+    let lighthouseFogGainNode = null, lighthouseSurfTimeoutId = null, lighthouseGearTimeoutId = null;
+    let atticRainGainNode = null, atticTimberGainNode = null, atticResGainNode = null, atticHearthTimeoutId = null;
     let snowWindGainNode = null, snowRadiatorGainNode = null, snowCabinGainNode = null, snowRailTimeoutId = null;
-    let lanternWaterGainNode = null, lanternOarTimeoutId = null, lanternCricketTimeoutId = null, lanternFrogTimeoutId = null;
-    let greenHumGainNode = null, greenMistGainNode = null, greenRillGainNode = null, greenLeafGainNode = null, greenMistTimeoutId = null, greenCricketTimeoutId = null;
-    let libraryRainFilterRef = null;
+    let lanternWaterGainNode = null, lanternHullGainNode = null, lanternOarTimeoutId = null, lanternCricketTimeoutId = null, lanternFrogTimeoutId = null;
+    let nebulaWashGainNode = null, nebulaThrumGainNode = null, nebulaVentGainNode = null;
+    let sailboatLatePhase = false, airshipLatePhase = false, desertLatePhase = false, atticLatePhase = false, lighthouseLatePhase = false, lanternLatePhase = false;
+    let sharedBrownBuffer = null, bedMidFilter = null, bedFilter = null;
 
     // Subtle Described-Action Sound Cue Map for Rainforest Train
     const RAINFOREST_SFX_CUES = {
@@ -365,23 +366,8 @@
       drift_29: [{ type: 'tree_wind', delay: 1.5, gain: 0.06 }]
     };
 
-    // Cue maps pasted for Library / Snowpiercer / Lantern only.
-    // Thermal, Airship, Deep Sea, Greenhouse: NO cue map was pasted, so none is invented.
-    const LIBRARY_SFX_CUES = {
-      departure_1: [{ type: 'door_slide', delay: 5.2, gain: 0.08 }],
-      drift_01: [{ type: 'floor_pass_hush', delay: 1.8, gain: 0.06 }],
-      drift_06: [{ type: 'floor_pass_hush', delay: 1.8, gain: 0.06 }],
-      drift_15: [{ type: 'floor_pass_hush', delay: 1.8, gain: 0.06 }],
-      drift_21: [{ type: 'floor_pass_hush', delay: 1.8, gain: 0.06 }],
-      drift_02: [{ type: 'ember_settle', delay: 2.0, gain: 0.05 }],
-      drift_13: [{ type: 'ember_settle', delay: 2.0, gain: 0.05 }],
-      drift_29: [{ type: 'ember_settle', delay: 2.0, gain: 0.05 }],
-      drift_05: [{ type: 'page_rustle', delay: 2.2, gain: 0.05 }],
-      drift_23: [{ type: 'page_rustle', delay: 2.2, gain: 0.05 }],
-      drift_03: [{ type: 'rain_glass_swell', delay: 1.8, gain: 0.07 }],
-      drift_16: [{ type: 'rain_glass_swell', delay: 1.8, gain: 0.07 }],
-      drift_28: [{ type: 'rain_glass_swell', delay: 1.8, gain: 0.07 }]
-    };
+    // Cue maps pasted for Snowpiercer / Lantern only.
+    // No cue map is invented for any other portal.
     const SNOWPIERCER_SFX_CUES = {
       departure_1: [{ type: 'door_slide', delay: 5.0, gain: 0.08 }],
       drift_02: [{ type: 'radiator_warm_hiss', delay: 1.8, gain: 0.05 }],
@@ -413,7 +399,7 @@
       if (!cueMap || !cueMap[clipKey]) return;
       cueMap[clipKey].forEach((cue) => {
         const tid = setTimeout(() => {
-          if (['floor_pass_hush','ember_settle','page_rustle','rain_glass_swell','radiator_warm_hiss','blizzard_gust_muffled','oar_dip_glide','soft_frog'].includes(cue.type)) triggerPortalCue(cue.type, cue.gain, token);
+          if (['radiator_warm_hiss','blizzard_gust_muffled','oar_dip_glide','soft_frog'].includes(cue.type)) triggerPortalCue(cue.type, cue.gain, token);
           else triggerSubtleCue(cue.type, cue.gain, token);
         }, cue.delay * 1000);
         sfxTimeouts.push(tid);
@@ -430,9 +416,7 @@
         g.gain.linearRampToValueAtTime(peak, now + dur * 0.4); g.gain.exponentialRampToValueAtTime(0.001, now + dur);
         src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + dur + 0.1);
       }
-      if (type === 'floor_pass_hush') noiseBurst('bandpass', 300, 1.5, 1.8, peakGain);
-      else if (type === 'page_rustle') noiseBurst('bandpass', 1100, 1.0, 2.2, peakGain);
-      else if (type === 'radiator_warm_hiss') noiseBurst('lowpass', 950, 0.7, 1.8, peakGain);
+      if (type === 'radiator_warm_hiss') noiseBurst('lowpass', 950, 0.7, 1.8, peakGain);
       else if (type === 'blizzard_gust_muffled') {
         const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer;
         const f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.2;
@@ -448,20 +432,6 @@
         o.frequency.setValueAtTime(90, now + 0.8); o.frequency.linearRampToValueAtTime(60, now + 1.6);
         og.gain.setValueAtTime(0.001, now + 0.8); og.gain.linearRampToValueAtTime(peakGain * 0.6, now + 1.0); og.gain.exponentialRampToValueAtTime(0.001, now + 1.7);
         o.connect(og); og.connect(masterGain); o.start(now + 0.8); o.stop(now + 1.8);
-      } else if (type === 'ember_settle') {
-        [0, 0.35, 0.8].forEach((off) => {
-          const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle';
-          o.frequency.setValueAtTime(280 + Math.random() * 120, now + off);
-          g.gain.setValueAtTime(0.001, now + off); g.gain.linearRampToValueAtTime(peakGain * 0.7, now + off + 0.02); g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.12);
-          o.connect(g); g.connect(masterGain); o.start(now + off); o.stop(now + off + 0.15);
-        });
-      } else if (type === 'rain_glass_swell') {
-        if (libraryRainFilterNode) {
-          libraryRainFilterNode.frequency.cancelScheduledValues(now);
-          libraryRainFilterNode.frequency.setValueAtTime(libraryRainFilterNode.frequency.value, now);
-          libraryRainFilterNode.frequency.linearRampToValueAtTime(1450, now + 0.9);
-          libraryRainFilterNode.frequency.linearRampToValueAtTime(1150, now + 1.8);
-        } else noiseBurst('bandpass', 1150, 1.0, 1.8, peakGain);
       } else if (type === 'soft_frog') {
         [0, 0.5].forEach((off) => {
           const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle';
@@ -504,6 +474,47 @@
       return buffer;
     }
 
+    function createBrownNoiseBuffer(seconds = 18) {
+      const bufferSize = audioCtx.sampleRate * seconds;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let lastOut = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        lastOut = (lastOut + (0.02 * white)) / 1.02;
+        output[i] = lastOut;
+      }
+      return buffer;
+    }
+
+    // Bed bus: every soundscape's masterGain feeds this chain, voice does not.
+    // bedMidFilter is a peaking filter at 600 Hz used only for voice ducking
+    // (gain 0 dB normally, about -1.5 dB while voice plays). bedFilter is the
+    // eyelid low-pass: 1600 Hz departure, 1100 early drifts, 700 late drifts, 380 lucid/fade.
+    function initBedBus() {
+      bedMidFilter = audioCtx.createBiquadFilter();
+      bedMidFilter.type = 'peaking'; bedMidFilter.frequency.value = 600; bedMidFilter.Q.value = 0.7; bedMidFilter.gain.value = 0;
+      bedFilter = audioCtx.createBiquadFilter();
+      bedFilter.type = 'lowpass'; bedFilter.frequency.value = 1600;
+      bedMidFilter.connect(bedFilter); bedFilter.connect(audioCtx.destination);
+    }
+    function setEyelidPhase(phase, token) {
+      if (token !== sessionToken || !audioCtx || !bedFilter) return;
+      const target = phase === 'departure' ? 1600 : phase === 'early' ? 1100 : phase === 'late' ? 700 : 380;
+      const now = audioCtx.currentTime;
+      bedFilter.frequency.cancelScheduledValues(now);
+      bedFilter.frequency.setValueAtTime(bedFilter.frequency.value, now);
+      bedFilter.frequency.linearRampToValueAtTime(target, now + 3);
+    }
+    function duckBed(on, token) {
+      if (token !== sessionToken || !audioCtx || !bedMidFilter) return;
+      const now = audioCtx.currentTime;
+      bedMidFilter.gain.cancelScheduledValues(now);
+      bedMidFilter.gain.setValueAtTime(bedMidFilter.gain.value, now);
+      if (on) bedMidFilter.gain.linearRampToValueAtTime(-1.5, now + 0.6);
+      else bedMidFilter.gain.linearRampToValueAtTime(0, now + 1.5);
+    }
+
     // Plays ultra-soft, underneath described-action cues
     function triggerSubtleCue(type, peakGain = 0.08, token) {
       if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
@@ -537,7 +548,7 @@
         latchOsc.frequency.setValueAtTime(68, now + 1.45);
         latchOsc.frequency.exponentialRampToValueAtTime(34, now + 1.65);
         latchGain.gain.setValueAtTime(0.001, now + 1.45);
-        latchGain.gain.linearRampToValueAtTime(peakGain * 1.1, now + 1.48);
+        latchGain.gain.linearRampToValueAtTime(peakGain * 1.1, now + 1.53);
         latchGain.gain.exponentialRampToValueAtTime(0.001, now + 1.72);
         latchOsc.connect(latchGain);
         latchGain.connect(masterGain);
@@ -635,37 +646,6 @@
       }
     }
 
-    function scheduleInsectChirps(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      const nextMs = randomBetween(1200, 3600);
-      insectTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !insectMasterGain) { scheduleInsectChirps(token); return; }
-        const now = audioCtx.currentTime;
-        const pulses = randomBetween(5, 8);
-        const baseFreq = 4200 + Math.random() * 900;
-        const panVal = (Math.random() * 2 - 1) * 0.7;
-        for (let i = 0; i < pulses; i++) {
-          const t = now + i * 0.09;
-          const osc = audioCtx.createOscillator();
-          const g = audioCtx.createGain();
-          osc.type = 'sine';
-          const pf = baseFreq * (1 + (Math.random() - 0.5) * 0.08);
-          osc.frequency.setValueAtTime(pf, t);
-          osc.frequency.linearRampToValueAtTime(pf * 0.88, t + 0.05);
-          g.gain.setValueAtTime(0.001, t);
-          g.gain.linearRampToValueAtTime(0.026 * atmosphereLevel, t + 0.015);
-          g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
-          osc.connect(g);
-          try {
-            const pan = audioCtx.createStereoPanner();
-            pan.pan.value = panVal;
-            g.connect(pan); pan.connect(insectMasterGain);
-          } catch (e) { g.connect(insectMasterGain); }
-          osc.start(t); osc.stop(t + 0.07);
-        }
-        scheduleInsectChirps(token);
-      }, nextMs);
-    }
 
     function scheduleLeafRustle(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
@@ -703,7 +683,7 @@
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(170 + Math.random() * 30, now + off);
           g.gain.setValueAtTime(0.001, now + off);
-          g.gain.linearRampToValueAtTime(0.016 * atmosphereLevel, now + off + 0.05);
+          g.gain.linearRampToValueAtTime(0.016 * atmosphereLevel, now + off + 0.08);
           g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.28);
           osc.connect(g); g.connect(insectMasterGain);
           osc.start(now + off); osc.stop(now + off + 0.3);
@@ -738,7 +718,7 @@
       masterGain = audioCtx.createGain();
       masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
       masterGain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 4);
-      masterGain.connect(audioCtx.destination);
+      masterGain.connect(bedMidFilter);
 
       const subOsc = audioCtx.createOscillator();
       subOsc.type = 'sine';
@@ -779,7 +759,7 @@
       masterGain = audioCtx.createGain();
       masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
       masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4);
-      masterGain.connect(audioCtx.destination);
+      masterGain.connect(bedMidFilter);
 
       // A. Warm Wooden Cabin Resonance (62Hz) + 4Hz Theta Binaural Drift
       const cabinOsc = audioCtx.createOscillator();
@@ -855,7 +835,7 @@
             osc.frequency.exponentialRampToValueAtTime(36, now + offset + 0.075);
 
             clickGain.gain.setValueAtTime(0.001, now + offset);
-            clickGain.gain.linearRampToValueAtTime(clackStrength, now + offset + 0.012);
+            clickGain.gain.linearRampToValueAtTime(clackStrength, now + offset + 0.08);
             clickGain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.095);
 
             osc.connect(clickGain);
@@ -869,14 +849,13 @@
       }
       scheduleNextRailClack();
       setAtmosphereLevel(0.5, token);
-      scheduleInsectChirps(token);
       scheduleLeafRustle(token);
       scheduleFrog(token);
     }
 
     // --- Sailboat on a Quiet Bay Soundscape (Portal 3, drafted from its scripts) ---
     // Layers, all soft, steady, and getting quieter by phase — don't-wake rule:
-    // 1. water lap (low-passed pink noise, 320 Hz) — the bay against the cedar hull
+    // 1. water lap (low-passed pink noise, 320 Hz) — the bay against the cedar hull (differentiation: creak 10-15s early, 16-24s late)
     // 2. night wind (bandpass noise, slow 220-380 Hz sweep) — breeze over the cove
     // 3. wooden cabin resonance (58 Hz) — the hull itself, like Rainforest's 62 Hz cabin
     // 4. sparse hull creak (every 9-14s, low triangle, never a clank, snap, or bell)
@@ -890,23 +869,23 @@
       if (sailboatWaterGainNode) {
         sailboatWaterGainNode.gain.cancelScheduledValues(now);
         sailboatWaterGainNode.gain.setValueAtTime(sailboatWaterGainNode.gain.value, now);
-        sailboatWaterGainNode.gain.linearRampToValueAtTime(0.35 + level * 0.30, now + 3);
+        sailboatWaterGainNode.gain.linearRampToValueAtTime(0.22 + level * 0.30, now + 3);
       }
       if (sailboatWindGainNode) {
         sailboatWindGainNode.gain.cancelScheduledValues(now);
         sailboatWindGainNode.gain.setValueAtTime(sailboatWindGainNode.gain.value, now);
-        sailboatWindGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3);
+        sailboatWindGainNode.gain.linearRampToValueAtTime(0.02 + level * 0.04, now + 3);
       }
       if (sailboatCabinGainNode) {
         sailboatCabinGainNode.gain.cancelScheduledValues(now);
         sailboatCabinGainNode.gain.setValueAtTime(sailboatCabinGainNode.gain.value, now);
-        sailboatCabinGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3);
+        sailboatCabinGainNode.gain.linearRampToValueAtTime(0.09 + level * 0.15, now + 3);
       }
     }
 
     function scheduleSailboatCreak(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      const nextMs = randomBetween(9000, 14000);
+      const nextMs = sailboatLatePhase ? randomBetween(16000, 24000) : randomBetween(10000, 15000);
       sailboatCreakTimeoutId = setTimeout(() => {
         if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleSailboatCreak(token); return; }
         const now = audioCtx.currentTime;
@@ -932,7 +911,7 @@
       masterGain = audioCtx.createGain();
       masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
       masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4);
-      masterGain.connect(audioCtx.destination);
+      masterGain.connect(bedMidFilter);
 
       // Wooden cabin / hull resonance (58 Hz)
       const cabinOsc = audioCtx.createOscillator();
@@ -992,7 +971,7 @@
       sailboatWindGainNode.connect(masterGain);
       windSource.start();
 
-      setSailboatAtmosphereLevel(0.5, token);
+      setSailboatAtmosphereLevel(0.55, token); sailboatLatePhase = false;
       scheduleSailboatCreak(token);
     }
 
@@ -1005,11 +984,11 @@
       // Phase 1: Pick 1 of 3 Rotating Departures (with real fallback to departure_1)
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setSailboatAtmosphereLevel(0.8, token);
+      setSailboatAtmosphereLevel(0.85, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding the Sailboat (Variant ${depChoice})...`;
-      const playedDep = await playVoicePath(`audio/sailboat/${depKey}.wav`, 0.85, token);
+      const playedDep = await playVoicePath(`audio/sailboat/${depKey}.wav`, 0.84, token, null, null, 2600);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/sailboat/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/sailboat/departure_1.wav', 0.84, token, null, null, 2600);
       }
 
       // Phase 2: Shuffle 30 Micro-Drifts and deal 18 with progressive random silence gaps
@@ -1020,54 +999,52 @@
 
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
+        const gap = i < 8 ? randomBetween(12, 19) : randomBetween(20, 30);
         readout.textContent = `Phase 2: Sailboat Drift (${i + 1}/${tonightDrifts.length}) — Water & Wind`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setSailboatAtmosphereLevel(1.0, token);
+        if (i === 0) { setSailboatAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
+        if (i === 8) { setSailboatAtmosphereLevel(0.75, token); sailboatLatePhase = true; setEyelidPhase('late', token); }
         readout.textContent = `Phase 2: Sailboat Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/sailboat/${tonightDrifts[i]}.wav`, 0.76, token);
+        await playVoicePath(`audio/sailboat/${tonightDrifts[i]}.wav`, 0.75, token, null, null, 2600);
       }
 
       // Phase 3: Pick 1 of 3 Rotating Lucid Seeds, at softer volume
       if (!isPlaying || token !== sessionToken) return;
-      setSailboatAtmosphereLevel(0.4, token);
+      setSailboatAtmosphereLevel(0.38, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(24, 30), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/sailboat/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/sailboat/lucid_seed_${seedChoice}.wav`, 0.52, token, null, null, 2600);
 
       fadeOutSoundscape(readout, token);
     }
 
 
-    // --- Thermal Springs (Portal 4) ---
-    // NO shishi-odoshi / bamboo clack — fresh-window audit overruled it. No clacks at all.
-    // 1. continuous laminar water wash (480 Hz bandpass pink noise, slow flow modulation)
-    // 2. winter crickets under heated rocks (2100 Hz trill, very sparse)
-    // 3. pine-bough snow brush + 60 Hz heated cedar floor resonance
-    function setThermalAtmosphereLevel(level, token) {
+    // --- Desert Star-Dune Pavilion (NEW, replaces Thermal Springs) ---
+    // Dry only: no water, no spout, no faucet, no crickets.
+    // 1. 240 Hz bandpass sand breeze, 16s horizon sweep  2. canvas billow 65-48 Hz every 11-16s
+    // 3. 52 + 78 Hz warm earth drone
+    function setDesertAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (thermalWaterGainNode) { thermalWaterGainNode.gain.cancelScheduledValues(now); thermalWaterGainNode.gain.setValueAtTime(thermalWaterGainNode.gain.value, now); thermalWaterGainNode.gain.linearRampToValueAtTime(0.35 + level * 0.30, now + 3); }
-      if (thermalSnowGainNode) { thermalSnowGainNode.gain.cancelScheduledValues(now); thermalSnowGainNode.gain.setValueAtTime(thermalSnowGainNode.gain.value, now); thermalSnowGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3); }
-      if (thermalCabinGainNode) { thermalCabinGainNode.gain.cancelScheduledValues(now); thermalCabinGainNode.gain.setValueAtTime(thermalCabinGainNode.gain.value, now); thermalCabinGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3); }
+      if (desertBreezeGainNode) { desertBreezeGainNode.gain.cancelScheduledValues(now); desertBreezeGainNode.gain.setValueAtTime(desertBreezeGainNode.gain.value, now); desertBreezeGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.25, now + 3); }
+      if (desertEarthGainNode) { desertEarthGainNode.gain.cancelScheduledValues(now); desertEarthGainNode.gain.setValueAtTime(desertEarthGainNode.gain.value, now); desertEarthGainNode.gain.linearRampToValueAtTime(0.12 + level * 0.10, now + 3); }
     }
-    function scheduleThermalCrickets(token) {
+    function scheduleDesertBillow(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      thermalCricketTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleThermalCrickets(token); return; }
-        const now = audioCtx.currentTime; const pulses = randomBetween(5, 8); const base = 2100 + Math.random() * 200;
-        for (let i = 0; i < pulses; i++) { const t = now + i * 0.09; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(base * (1 + (Math.random() - 0.5) * 0.06), t); g.gain.setValueAtTime(0.001, t); g.gain.linearRampToValueAtTime(0.020 * atmosphereLevel, t + 0.015); g.gain.exponentialRampToValueAtTime(0.001, t + 0.06); o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.07); }
-        scheduleThermalCrickets(token);
-      }, randomBetween(8000, 18000));
+      desertBillowTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleDesertBillow(token); return; }
+        const now = audioCtx.currentTime; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(65, now); o.frequency.linearRampToValueAtTime(48, now + 2.8); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.05 * atmosphereLevel, now + 1.0); g.gain.exponentialRampToValueAtTime(0.001, now + 2.8); o.connect(g); g.connect(masterGain); o.start(now); o.stop(now + 2.9);
+        scheduleDesertBillow(token);
+      }, desertLatePhase ? randomBetween(16000, 22000) : randomBetween(11000, 16000));
     }
-    function startThermalSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
-      sharedNoiseBuffer = createPinkNoiseBuffer(18);
-      const cabin = audioCtx.createOscillator(); cabin.type = 'sine'; cabin.frequency.value = 60; thermalCabinGainNode = audioCtx.createGain(); thermalCabinGainNode.gain.value = 0.27; cabin.connect(thermalCabinGainNode); thermalCabinGainNode.connect(masterGain); cabin.start();
-      const water = audioCtx.createBufferSource(); water.buffer = sharedNoiseBuffer; water.loop = true; const wf = audioCtx.createBiquadFilter(); wf.type = 'bandpass'; wf.frequency.value = 480; wf.Q.value = 0.8; thermalWaterGainNode = audioCtx.createGain(); thermalWaterGainNode.gain.value = 0.50; const wl = audioCtx.createOscillator(); const wlg = audioCtx.createGain(); wl.type = 'sine'; wl.frequency.value = 0.2; wlg.gain.value = 0.06; wl.connect(wlg); wlg.connect(thermalWaterGainNode.gain); wl.start(); water.connect(wf); wf.connect(thermalWaterGainNode); thermalWaterGainNode.connect(masterGain); water.start();
-      const snow = audioCtx.createBufferSource(); snow.buffer = sharedNoiseBuffer; snow.loop = true; snow.playbackRate.value = 0.6; const sf = audioCtx.createBiquadFilter(); sf.type = 'bandpass'; sf.frequency.value = 350; sf.Q.value = 1.0; thermalSnowGainNode = audioCtx.createGain(); thermalSnowGainNode.gain.value = 0.06; snow.connect(sf); sf.connect(thermalSnowGainNode); thermalSnowGainNode.connect(masterGain); snow.start();
-      setThermalAtmosphereLevel(0.5, token); scheduleThermalCrickets(token);
+    function startDesertSoundscape(token) {
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
+      sharedNoiseBuffer = createPinkNoiseBuffer(18); sharedBrownBuffer = createBrownNoiseBuffer(18);
+      const breeze = audioCtx.createBufferSource(); breeze.buffer = sharedBrownBuffer; breeze.loop = true; const bf = audioCtx.createBiquadFilter(); bf.type = 'bandpass'; bf.frequency.value = 240; bf.Q.value = 1.0; const bl = audioCtx.createOscillator(); const blg = audioCtx.createGain(); bl.type = 'sine'; bl.frequency.value = 0.0625; blg.gain.value = 40; bl.connect(blg); blg.connect(bf.frequency); bl.start(); desertBreezeGainNode = audioCtx.createGain(); desertBreezeGainNode.gain.value = 0.40; breeze.connect(bf); bf.connect(desertBreezeGainNode); desertBreezeGainNode.connect(masterGain); breeze.start();
+      const earthGain = audioCtx.createGain(); earthGain.gain.value = 0.20; desertEarthGainNode = earthGain; earthGain.connect(masterGain);
+      [52, 78].forEach((freq) => { const o = audioCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq; o.connect(earthGain); o.start(); });
+      setDesertAtmosphereLevel(0.65, token); desertLatePhase = false; scheduleDesertBillow(token);
     }
 
     // --- Cloud Airship (Portal 5) ---
@@ -1076,9 +1053,9 @@
     // 3. cloud-mist brush bandpass 220-380 Hz  4. brass floor-register warm air purr (low sine + soft noise)
     function setAirshipAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (airshipPropGainNode) { airshipPropGainNode.gain.cancelScheduledValues(now); airshipPropGainNode.gain.setValueAtTime(airshipPropGainNode.gain.value, now); airshipPropGainNode.gain.linearRampToValueAtTime(0.12 + level * 0.10, now + 3); }
-      if (airshipMistGainNode) { airshipMistGainNode.gain.cancelScheduledValues(now); airshipMistGainNode.gain.setValueAtTime(airshipMistGainNode.gain.value, now); airshipMistGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3); }
-      if (airshipWarmGainNode) { airshipWarmGainNode.gain.cancelScheduledValues(now); airshipWarmGainNode.gain.setValueAtTime(airshipWarmGainNode.gain.value, now); airshipWarmGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3); }
+      if (airshipPropGainNode) { airshipPropGainNode.gain.cancelScheduledValues(now); airshipPropGainNode.gain.setValueAtTime(airshipPropGainNode.gain.value, now); airshipPropGainNode.gain.linearRampToValueAtTime(0.06 + level * 0.10, now + 3); }
+      if (airshipMistGainNode) { airshipMistGainNode.gain.cancelScheduledValues(now); airshipMistGainNode.gain.setValueAtTime(airshipMistGainNode.gain.value, now); airshipMistGainNode.gain.linearRampToValueAtTime(0.02 + level * 0.04, now + 3); }
+      if (airshipWarmGainNode) { airshipWarmGainNode.gain.cancelScheduledValues(now); airshipWarmGainNode.gain.setValueAtTime(airshipWarmGainNode.gain.value, now); airshipWarmGainNode.gain.linearRampToValueAtTime(0.03 + level * 0.04, now + 3); }
     }
     function scheduleAirshipCreak(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
@@ -1086,120 +1063,112 @@
         if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleAirshipCreak(token); return; }
         const now = audioCtx.currentTime; const o = audioCtx.createOscillator(); const f = audioCtx.createBiquadFilter(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(110, now); o.frequency.linearRampToValueAtTime(92, now + 1.0); o.frequency.linearRampToValueAtTime(104, now + 2.0); f.type = 'lowpass'; f.frequency.value = 220; g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.05 * atmosphereLevel, now + 0.7); g.gain.exponentialRampToValueAtTime(0.001, now + 2.1); o.connect(f); f.connect(g); g.connect(masterGain); o.start(now); o.stop(now + 2.2);
         scheduleAirshipCreak(token);
-      }, randomBetween(9000, 14000));
+      }, airshipLatePhase ? randomBetween(18000, 26000) : randomBetween(11000, 16000));
     }
     function startAirshipSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
       sharedNoiseBuffer = createPinkNoiseBuffer(18);
       const m1 = audioCtx.createChannelMerger(2); const p1 = audioCtx.createOscillator(); const p2 = audioCtx.createOscillator(); airshipPropGainNode = audioCtx.createGain(); airshipPropGainNode.gain.value = 0.17; p1.frequency.value = 52; p2.frequency.value = 53.2; p1.connect(m1, 0, 0); p2.connect(m1, 0, 1); m1.connect(airshipPropGainNode); airshipPropGainNode.connect(masterGain); p1.start(); p2.start();
       const mist = audioCtx.createBufferSource(); mist.buffer = sharedNoiseBuffer; mist.loop = true; const mf = audioCtx.createBiquadFilter(); mf.type = 'bandpass'; mf.frequency.value = 300; mf.Q.value = 1.0; const ml = audioCtx.createOscillator(); const mlg = audioCtx.createGain(); ml.type = 'sine'; ml.frequency.value = 0.05; mlg.gain.value = 80; ml.connect(mlg); mlg.connect(mf.frequency); ml.start(); airshipMistGainNode = audioCtx.createGain(); airshipMistGainNode.gain.value = 0.06; mist.connect(mf); mf.connect(airshipMistGainNode); airshipMistGainNode.connect(masterGain); mist.start();
       const warm = audioCtx.createOscillator(); warm.type = 'sine'; warm.frequency.value = 88; airshipWarmGainNode = audioCtx.createGain(); airshipWarmGainNode.gain.value = 0.06; warm.connect(airshipWarmGainNode); airshipWarmGainNode.connect(masterGain); warm.start();
-      setAirshipAtmosphereLevel(0.5, token); scheduleAirshipCreak(token);
+      setAirshipAtmosphereLevel(0.5, token); airshipLatePhase = false; scheduleAirshipCreak(token);
     }
 
-    // --- Deep Sea Observatory (Portal 6) ---
-    // NO sonar, NO hull groans, NO hydrophone crackle/static, NO whale calls.
-    // 1. tidal surge 12s swell 120-260 Hz  2. silt/sand brush low crackle  3. air-scrubber purr + 58 Hz hum  4. distant 42 Hz hollow canyon swell
-    function setDeepSeaAtmosphereLevel(level, token) {
+    // --- Cliffside Lighthouse Watch-Room (NEW, replaces Deep Sea) ---
+    // No underwater rumble, no trench drone, no pressure language.
+    // 1. distant cliff-base surf, asymmetric: 5s roll-in 90-240 Hz, 9s recession to 80 Hz, diffused heavy water
+    // 2. whisper-quiet 110 Hz gear purr every 14s, 2.5s swell, softer than the surf, never a flashing rhythm
+    // 3. 210 Hz sea-fog draft through stone
+    function setLighthouseAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (deepSurgeGainNode) { deepSurgeGainNode.gain.cancelScheduledValues(now); deepSurgeGainNode.gain.setValueAtTime(deepSurgeGainNode.gain.value, now); }
-      if (deepSiltGainNode) { deepSiltGainNode.gain.cancelScheduledValues(now); deepSiltGainNode.gain.setValueAtTime(deepSiltGainNode.gain.value, now); deepSiltGainNode.gain.linearRampToValueAtTime(0.03 + level * 0.03, now + 3); }
-      if (deepCabinGainNode) { deepCabinGainNode.gain.cancelScheduledValues(now); deepCabinGainNode.gain.setValueAtTime(deepCabinGainNode.gain.value, now); deepCabinGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3); }
+      if (lighthouseFogGainNode) { lighthouseFogGainNode.gain.cancelScheduledValues(now); lighthouseFogGainNode.gain.setValueAtTime(lighthouseFogGainNode.gain.value, now); lighthouseFogGainNode.gain.linearRampToValueAtTime(0.02 + level * 0.03, now + 3); }
     }
-    function scheduleDeepSurge(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
-      deepSurgeTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
-        const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.0; f.frequency.setValueAtTime(120, now); f.frequency.linearRampToValueAtTime(260, now + 6); f.frequency.linearRampToValueAtTime(120, now + 12); const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.08 * atmosphereLevel, now + 6); g.gain.exponentialRampToValueAtTime(0.001, now + 12); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 12.1);
-        scheduleDeepSurge(token);
-      }, 12000);
-    }
-    function scheduleDeepCanyon(token) {
+    function scheduleLighthouseSurf(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      deepCanyonTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleDeepCanyon(token); return; }
-        const now = audioCtx.currentTime; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = 42; g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.06 * atmosphereLevel, now + 2.0); g.gain.exponentialRampToValueAtTime(0.001, now + 6); o.connect(g); g.connect(masterGain); o.start(now); o.stop(now + 6.1);
-        scheduleDeepCanyon(token);
-      }, randomBetween(25000, 40000));
+      lighthouseSurfTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLighthouseSurf(token); return; }
+        const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedBrownBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.0; f.frequency.setValueAtTime(90, now); f.frequency.linearRampToValueAtTime(240, now + 5); f.frequency.linearRampToValueAtTime(80, now + 14); const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.08 * atmosphereLevel, now + 5); g.gain.exponentialRampToValueAtTime(0.001, now + 14); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 14.1);
+        scheduleLighthouseSurf(token);
+      }, 14000);
     }
-    function startDeepSeaSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
-      sharedNoiseBuffer = createPinkNoiseBuffer(18);
-      const cabin = audioCtx.createOscillator(); cabin.type = 'sine'; cabin.frequency.value = 58; deepCabinGainNode = audioCtx.createGain(); deepCabinGainNode.gain.value = 0.27; cabin.connect(deepCabinGainNode); deepCabinGainNode.connect(masterGain); cabin.start();
-      const silt = audioCtx.createBufferSource(); silt.buffer = sharedNoiseBuffer; silt.loop = true; const sf = audioCtx.createBiquadFilter(); sf.type = 'lowpass'; sf.frequency.value = 200; deepSiltGainNode = audioCtx.createGain(); deepSiltGainNode.gain.value = 0.045; silt.connect(sf); sf.connect(deepSiltGainNode); deepSiltGainNode.connect(masterGain); silt.start();
-      const purr = audioCtx.createBufferSource(); purr.buffer = sharedNoiseBuffer; purr.loop = true; purr.playbackRate.value = 0.5; const pf = audioCtx.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 400; const pg = audioCtx.createGain(); pg.gain.value = 0.04; purr.connect(pf); pf.connect(pg); pg.connect(masterGain); purr.start();
-      deepSurgeGainNode = audioCtx.createGain(); deepSurgeGainNode.gain.value = 0.05;
-      setDeepSeaAtmosphereLevel(0.5, token); scheduleDeepSurge(token); scheduleDeepCanyon(token);
+    function scheduleLighthouseGear(token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx) return;
+      lighthouseGearTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLighthouseGear(token); return; }
+        const now = audioCtx.currentTime; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.value = 110; g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.015 * atmosphereLevel, now + 1.0); g.gain.exponentialRampToValueAtTime(0.001, now + 2.5); o.connect(g); g.connect(masterGain); o.start(now); o.stop(now + 2.6);
+        scheduleLighthouseGear(token);
+      }, 14000);
+    }
+    function startLighthouseSoundscape(token) {
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
+      sharedNoiseBuffer = createPinkNoiseBuffer(18); sharedBrownBuffer = createBrownNoiseBuffer(18);
+      const fog = audioCtx.createBufferSource(); fog.buffer = sharedBrownBuffer; fog.loop = true; const ff = audioCtx.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 210; ff.Q.value = 1.0; lighthouseFogGainNode = audioCtx.createGain(); lighthouseFogGainNode.gain.value = 0.04; fog.connect(ff); ff.connect(lighthouseFogGainNode); lighthouseFogGainNode.connect(masterGain); fog.start();
+      setLighthouseAtmosphereLevel(0.60, token); lighthouseLatePhase = false; scheduleLighthouseSurf(token); scheduleLighthouseGear(token);
     }
 
-    // --- Midnight Library Elevator (Portal 7) ---
-    // NO ding, NO screech, NO footsteps, NO voices/coughing.
-    // 1. 56 Hz hydraulic/cable hum + floor-beam pass every 7-11s  2. rain on glass shaft 1150 Hz low-passed pink noise
-    // 3. hearth crackle sparse low-passed 400-900 Hz ember pops, never sharp  4. page/cushion settle via cues only
-    function setLibraryAtmosphereLevel(level, token) {
+    // --- Attic Rain-Loft Library (NEW, replaces the old library portal) ---
+    // No cable hum, no floor-passing whooshes, no mechanical hums.
+    // 1. skylight rain, diffused: 1350 Hz glass patter (pink noise, no individual plinks)
+    // 2. 320 Hz timber thrum (brown noise)  3. 64 Hz loft resonance  4. hearth embers, low-passed 600 Hz, every 15-30s
+    function setAtticAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (libraryHumGainNode) { libraryHumGainNode.gain.cancelScheduledValues(now); libraryHumGainNode.gain.setValueAtTime(libraryHumGainNode.gain.value, now); libraryHumGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3); }
-      if (libraryRainGainNode) { libraryRainGainNode.gain.cancelScheduledValues(now); libraryRainGainNode.gain.setValueAtTime(libraryRainGainNode.gain.value, now); libraryRainGainNode.gain.linearRampToValueAtTime(0.35 + level * 0.30, now + 3); }
+      if (atticRainGainNode) { atticRainGainNode.gain.cancelScheduledValues(now); atticRainGainNode.gain.setValueAtTime(atticRainGainNode.gain.value, now); atticRainGainNode.gain.linearRampToValueAtTime(0.16 + level * 0.30, now + 3); }
+      if (atticTimberGainNode) { atticTimberGainNode.gain.cancelScheduledValues(now); atticTimberGainNode.gain.setValueAtTime(atticTimberGainNode.gain.value, now); atticTimberGainNode.gain.linearRampToValueAtTime(0.10 + level * 0.15, now + 3); }
+      if (atticResGainNode) { atticResGainNode.gain.cancelScheduledValues(now); atticResGainNode.gain.setValueAtTime(atticResGainNode.gain.value, now); atticResGainNode.gain.linearRampToValueAtTime(0.05 + level * 0.05, now + 3); }
     }
-    function scheduleLibraryFloor(token) {
+    function scheduleAtticHearth(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      libraryFloorTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLibraryFloor(token); return; }
-        const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(220, now); f.frequency.linearRampToValueAtTime(420, now + 1.0); f.frequency.linearRampToValueAtTime(220, now + 2.0); f.Q.value = 1.2; const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.05 * atmosphereLevel, now + 1.0); g.gain.exponentialRampToValueAtTime(0.001, now + 2.1); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 2.2);
-        scheduleLibraryFloor(token);
-      }, randomBetween(7000, 11000));
+      atticHearthTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleAtticHearth(token); return; }
+        const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 600; const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.025 * atmosphereLevel, now + 0.5); g.gain.exponentialRampToValueAtTime(0.001, now + 2.0); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 2.1);
+        scheduleAtticHearth(token);
+      }, randomBetween(15000, 30000));
     }
-    function scheduleLibraryHearth(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      libraryHearthTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLibraryHearth(token); return; }
-        const now = audioCtx.currentTime; [0, 0.4].forEach((off) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(400 + Math.random() * 300, now + off); g.gain.setValueAtTime(0.001, now + off); g.gain.linearRampToValueAtTime(0.025 * atmosphereLevel, now + off + 0.03); g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.15); o.connect(g); g.connect(masterGain); o.start(now + off); o.stop(now + off + 0.2); });
-        scheduleLibraryHearth(token);
-      }, randomBetween(9000, 18000));
-    }
-    function startLibrarySoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
-      sharedNoiseBuffer = createPinkNoiseBuffer(18);
-      const hum = audioCtx.createOscillator(); hum.type = 'sine'; hum.frequency.value = 56; libraryHumGainNode = audioCtx.createGain(); libraryHumGainNode.gain.value = 0.27; hum.connect(libraryHumGainNode); libraryHumGainNode.connect(masterGain); hum.start();
-      const rain = audioCtx.createBufferSource(); rain.buffer = sharedNoiseBuffer; rain.loop = true; libraryRainFilterNode = audioCtx.createBiquadFilter(); libraryRainFilterNode.type = 'lowpass'; libraryRainFilterNode.frequency.value = 1150; libraryRainGainNode = audioCtx.createGain(); libraryRainGainNode.gain.value = 0.50; rain.connect(libraryRainFilterNode); libraryRainFilterNode.connect(libraryRainGainNode); libraryRainGainNode.connect(masterGain); rain.start();
-      setLibraryAtmosphereLevel(0.5, token); scheduleLibraryFloor(token); scheduleLibraryHearth(token);
+    function startAtticSoundscape(token) {
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
+      sharedNoiseBuffer = createPinkNoiseBuffer(18); sharedBrownBuffer = createBrownNoiseBuffer(18);
+      const rain = audioCtx.createBufferSource(); rain.buffer = sharedNoiseBuffer; rain.loop = true; const rf = audioCtx.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 1350; atticRainGainNode = audioCtx.createGain(); atticRainGainNode.gain.value = 0.50; rain.connect(rf); rf.connect(atticRainGainNode); atticRainGainNode.connect(masterGain); rain.start();
+      const timber = audioCtx.createBufferSource(); timber.buffer = sharedBrownBuffer; timber.loop = true; const tf = audioCtx.createBiquadFilter(); tf.type = 'lowpass'; tf.frequency.value = 320; atticTimberGainNode = audioCtx.createGain(); atticTimberGainNode.gain.value = 0.20; timber.connect(tf); tf.connect(atticTimberGainNode); atticTimberGainNode.connect(masterGain); timber.start();
+      const res = audioCtx.createOscillator(); res.type = 'sine'; res.frequency.value = 64; atticResGainNode = audioCtx.createGain(); atticResGainNode.gain.value = 0.08; res.connect(atticResGainNode); atticResGainNode.connect(masterGain); res.start();
+      setAtticAtmosphereLevel(0.5, token); atticLatePhase = false; scheduleAtticHearth(token);
     }
 
     // --- Snowpiercer Observatory (Portal 8) ---
     // NO horn/whistle, NO wheel squeal, NO high wind whistle, NO clanking pipes.
-    // 1. heavy rail rhythm 2.4-3.1s, lower/heavier  2. blizzard wind 220-420 Hz LFO sweep
+    // 1. heavy rail rhythm 3.2-4.2s, lower/heavier — slower than Rainforest clack by design  2. blizzard wind 220-420 Hz LFO sweep
     // 3. radiator hiss 950 Hz, drifts 0.04, scaled down in lucid  4. carriage resonance 54 Hz
     function setSnowAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (snowWindGainNode) { snowWindGainNode.gain.cancelScheduledValues(now); snowWindGainNode.gain.setValueAtTime(snowWindGainNode.gain.value, now); snowWindGainNode.gain.linearRampToValueAtTime(0.05 + level * 0.05, now + 3); }
-      if (snowRadiatorGainNode) { snowRadiatorGainNode.gain.cancelScheduledValues(now); snowRadiatorGainNode.gain.setValueAtTime(snowRadiatorGainNode.gain.value, now); snowRadiatorGainNode.gain.linearRampToValueAtTime(0.02 + level * 0.02, now + 3); }
-      if (snowCabinGainNode) { snowCabinGainNode.gain.cancelScheduledValues(now); snowCabinGainNode.gain.setValueAtTime(snowCabinGainNode.gain.value, now); snowCabinGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3); }
+      if (snowWindGainNode) { snowWindGainNode.gain.cancelScheduledValues(now); snowWindGainNode.gain.setValueAtTime(snowWindGainNode.gain.value, now); snowWindGainNode.gain.linearRampToValueAtTime(0.03 + level * 0.05, now + 3); }
+      if (snowRadiatorGainNode) { snowRadiatorGainNode.gain.cancelScheduledValues(now); snowRadiatorGainNode.gain.setValueAtTime(snowRadiatorGainNode.gain.value, now); snowRadiatorGainNode.gain.linearRampToValueAtTime(0.01 + level * 0.02, now + 3); }
+      if (snowCabinGainNode) { snowCabinGainNode.gain.cancelScheduledValues(now); snowCabinGainNode.gain.setValueAtTime(snowCabinGainNode.gain.value, now); snowCabinGainNode.gain.linearRampToValueAtTime(0.15 + level * 0.15, now + 3); }
     }
     function scheduleSnowRail(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
       snowRailTimeoutId = setTimeout(() => {
         if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
-        const now = audioCtx.currentTime; const base = randomBetween(60, 70); const pairGap = 0.25; const strength = (0.10 + Math.random() * 0.03) * (0.4 + atmosphereLevel * 0.6);
-        [0, pairGap].forEach((off, idx) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(base - idx * 3, now + off); o.frequency.exponentialRampToValueAtTime(32, now + off + 0.09); g.gain.setValueAtTime(0.001, now + off); g.gain.linearRampToValueAtTime(strength, now + off + 0.015); g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.11); o.connect(g); g.connect(masterGain); o.start(now + off); o.stop(now + off + 0.13); });
+        const now = audioCtx.currentTime; const base = randomBetween(58, 66); const pairGap = 0.28; const strength = (0.10 + Math.random() * 0.03) * (0.4 + atmosphereLevel * 0.6);
+        [0, pairGap].forEach((off, idx) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(base - idx * 3, now + off); o.frequency.exponentialRampToValueAtTime(32, now + off + 0.09); g.gain.setValueAtTime(0.001, now + off); g.gain.linearRampToValueAtTime(strength, now + off + 0.08); g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.11); o.connect(g); g.connect(masterGain); o.start(now + off); o.stop(now + off + 0.13); });
         scheduleSnowRail(token);
-      }, randomBetween(2400, 3100));
+      }, randomBetween(3200, 4200));
     }
     function startSnowSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
       sharedNoiseBuffer = createPinkNoiseBuffer(18);
       const cabin = audioCtx.createOscillator(); cabin.type = 'sine'; cabin.frequency.value = 54; snowCabinGainNode = audioCtx.createGain(); snowCabinGainNode.gain.value = 0.27; cabin.connect(snowCabinGainNode); snowCabinGainNode.connect(masterGain); cabin.start();
       const wind = audioCtx.createBufferSource(); wind.buffer = sharedNoiseBuffer; wind.loop = true; const wf = audioCtx.createBiquadFilter(); wf.type = 'bandpass'; wf.frequency.value = 320; wf.Q.value = 1.0; const wl = audioCtx.createOscillator(); const wlg = audioCtx.createGain(); wl.type = 'sine'; wl.frequency.value = 0.06; wlg.gain.value = 100; wl.connect(wlg); wlg.connect(wf.frequency); wl.start(); snowWindGainNode = audioCtx.createGain(); snowWindGainNode.gain.value = 0.075; wind.connect(wf); wf.connect(snowWindGainNode); snowWindGainNode.connect(masterGain); wind.start();
       const rad = audioCtx.createBufferSource(); rad.buffer = sharedNoiseBuffer; rad.loop = true; const rf = audioCtx.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 950; snowRadiatorGainNode = audioCtx.createGain(); snowRadiatorGainNode.gain.value = 0.03; rad.connect(rf); rf.connect(snowRadiatorGainNode); snowRadiatorGainNode.connect(masterGain); rad.start();
-      setSnowAtmosphereLevel(0.5, token); scheduleSnowRail(token);
+      setSnowAtmosphereLevel(0.55, token); scheduleSnowRail(token);
     }
 
     // --- Lantern Canal (Portal 9) ---
     // NO motorboats, NO shore voices, NO bells, NO sharp splashing.
-    // 1. oar dip every 5.5-7.5s (280 Hz bandpass dip + pivot settle, softer as level drops)
+    // 1. oar dip every 6.5-9.0s early, 9.5-13.0s late (280 Hz bandpass dip + pivot settle, softer as level drops)
     // 2. canal water lap 320 Hz low-passed  3. crickets + distant frogs (v3.1 trill + 180 Hz frog)  4. bridge/tree cues
     function setLanternAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (lanternWaterGainNode) { lanternWaterGainNode.gain.cancelScheduledValues(now); lanternWaterGainNode.gain.setValueAtTime(lanternWaterGainNode.gain.value, now); lanternWaterGainNode.gain.linearRampToValueAtTime(0.35 + level * 0.30, now + 3); }
+      if (lanternWaterGainNode) { lanternWaterGainNode.gain.cancelScheduledValues(now); lanternWaterGainNode.gain.setValueAtTime(lanternWaterGainNode.gain.value, now); lanternWaterGainNode.gain.linearRampToValueAtTime(0.18 + level * 0.30, now + 3); }
+      if (lanternHullGainNode) { lanternHullGainNode.gain.cancelScheduledValues(now); lanternHullGainNode.gain.setValueAtTime(lanternHullGainNode.gain.value, now); lanternHullGainNode.gain.linearRampToValueAtTime(0.05 + level * 0.15, now + 3); }
     }
     function scheduleLanternOar(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
@@ -1207,16 +1176,7 @@
         if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLanternOar(token); return; }
         const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 280; f.Q.value = 1.5; const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.06 * atmosphereLevel, now + 0.4); g.gain.exponentialRampToValueAtTime(0.001, now + 1.6); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 1.7);
         scheduleLanternOar(token);
-      }, randomBetween(5500, 7500));
-    }
-    function scheduleLanternCrickets(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      lanternCricketTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLanternCrickets(token); return; }
-        const now = audioCtx.currentTime; const pulses = randomBetween(5, 8); const base = 4200 + Math.random() * 900;
-        for (let i = 0; i < pulses; i++) { const t = now + i * 0.09; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(base * (1 + (Math.random() - 0.5) * 0.08), t); g.gain.setValueAtTime(0.001, t); g.gain.linearRampToValueAtTime(0.022 * atmosphereLevel, t + 0.015); g.gain.exponentialRampToValueAtTime(0.001, t + 0.06); o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.07); }
-        scheduleLanternCrickets(token);
-      }, randomBetween(4000, 9000));
+      }, lanternLatePhase ? randomBetween(9500, 13000) : randomBetween(6500, 9000));
     }
     function scheduleLanternFrog(token) {
       if (!isPlaying || token !== sessionToken || !audioCtx) return;
@@ -1224,85 +1184,74 @@
         if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleLanternFrog(token); return; }
         const now = audioCtx.currentTime; [0, 0.35].forEach((off) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(180, now + off); g.gain.setValueAtTime(0.001, now + off); g.gain.linearRampToValueAtTime(0.016 * atmosphereLevel, now + off + 0.05); g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.28); o.connect(g); g.connect(masterGain); o.start(now + off); o.stop(now + off + 0.3); });
         scheduleLanternFrog(token);
-      }, randomBetween(20000, 40000));
+      }, randomBetween(25000, 45000));
     }
     function startLanternSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
       sharedNoiseBuffer = createPinkNoiseBuffer(18);
       const water = audioCtx.createBufferSource(); water.buffer = sharedNoiseBuffer; water.loop = true; const wf = audioCtx.createBiquadFilter(); wf.type = 'lowpass'; wf.frequency.value = 320; lanternWaterGainNode = audioCtx.createGain(); lanternWaterGainNode.gain.value = 0.50; water.connect(wf); wf.connect(lanternWaterGainNode); lanternWaterGainNode.connect(masterGain); water.start();
-      setLanternAtmosphereLevel(0.5, token); scheduleLanternOar(token); scheduleLanternCrickets(token); scheduleLanternFrog(token);
+      const hullOsc = audioCtx.createOscillator(); hullOsc.type = 'sine'; hullOsc.frequency.value = 48; lanternHullGainNode = audioCtx.createGain(); lanternHullGainNode.gain.value = 0.12; hullOsc.connect(lanternHullGainNode); lanternHullGainNode.connect(masterGain); hullOsc.start();
+      setLanternAtmosphereLevel(0.5, token); lanternLatePhase = false; scheduleLanternOar(token);  scheduleLanternFrog(token);
     }
 
-    // --- Orbital Glasshouse Conservatory / Greenhouse (Portal 10) ---
-    // NO beeps, NO airlock alarms, NO metallic clangs, NO sudden sprinkler hisses. No cue map pasted — no cues added.
-    // 1. 50 Hz dome climate hum  2. misting nozzles 1350 Hz low-passed pink noise swelling every 25-40s
-    // 3. stone rill 420 Hz bandpass trickle, no high splashes  4. leaf wind + sparse greenhouse crickets
-    function setGreenAtmosphereLevel(level, token) {
+    // --- Deep-Space Nebula Cruiser (NEW, replaces Greenhouse) ---
+    // Beatless: brown-noise dust wash through slow low-pass filters, 40 + 80 Hz thrum,
+    // 380 Hz ventilation. No rhythm, no propeller beat, no clack, no oar, no spraying, no crickets, no water.
+    function setNebulaAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (greenHumGainNode) { greenHumGainNode.gain.cancelScheduledValues(now); greenHumGainNode.gain.setValueAtTime(greenHumGainNode.gain.value, now); greenHumGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3); }
-      if (greenRillGainNode) { greenRillGainNode.gain.cancelScheduledValues(now); greenRillGainNode.gain.setValueAtTime(greenRillGainNode.gain.value, now); greenRillGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3); }
-      if (greenLeafGainNode) { greenLeafGainNode.gain.cancelScheduledValues(now); greenLeafGainNode.gain.setValueAtTime(greenLeafGainNode.gain.value, now); greenLeafGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3); }
+      if (nebulaWashGainNode) { nebulaWashGainNode.gain.cancelScheduledValues(now); nebulaWashGainNode.gain.setValueAtTime(nebulaWashGainNode.gain.value, now); nebulaWashGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.20, now + 3); }
+      if (nebulaThrumGainNode) { nebulaThrumGainNode.gain.cancelScheduledValues(now); nebulaThrumGainNode.gain.setValueAtTime(nebulaThrumGainNode.gain.value, now); nebulaThrumGainNode.gain.linearRampToValueAtTime(0.12 + level * 0.10, now + 3); }
+      if (nebulaVentGainNode) { nebulaVentGainNode.gain.cancelScheduledValues(now); nebulaVentGainNode.gain.setValueAtTime(nebulaVentGainNode.gain.value, now); nebulaVentGainNode.gain.linearRampToValueAtTime(0.02 + level * 0.02, now + 3); }
     }
-    function scheduleGreenMist(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      greenMistTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleGreenMist(token); return; }
-        const now = audioCtx.currentTime; const src = audioCtx.createBufferSource(); src.buffer = sharedNoiseBuffer; const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1350; const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001, now); g.gain.linearRampToValueAtTime(0.08 * atmosphereLevel, now + 3); g.gain.exponentialRampToValueAtTime(0.001, now + 6); src.connect(f); f.connect(g); g.connect(masterGain); src.start(now); src.stop(now + 6.1);
-        scheduleGreenMist(token);
-      }, randomBetween(25000, 40000));
-    }
-    function scheduleGreenCrickets(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx) return;
-      greenCricketTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleGreenCrickets(token); return; }
-        const now = audioCtx.currentTime; const pulses = randomBetween(4, 6); const base = 3800 + Math.random() * 600;
-        for (let i = 0; i < pulses; i++) { const t = now + i * 0.09; const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(base, t); g.gain.setValueAtTime(0.001, t); g.gain.linearRampToValueAtTime(0.018 * atmosphereLevel, t + 0.015); g.gain.exponentialRampToValueAtTime(0.001, t + 0.06); o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.07); }
-        scheduleGreenCrickets(token);
-      }, randomBetween(9000, 18000));
-    }
-    function startGreenSoundscape(token) {
-      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(audioCtx.destination);
-      sharedNoiseBuffer = createPinkNoiseBuffer(18);
-      const hum = audioCtx.createOscillator(); hum.type = 'sine'; hum.frequency.value = 50; greenHumGainNode = audioCtx.createGain(); greenHumGainNode.gain.value = 0.27; hum.connect(greenHumGainNode); greenHumGainNode.connect(masterGain); hum.start();
-      const rill = audioCtx.createBufferSource(); rill.buffer = sharedNoiseBuffer; rill.loop = true; const rf = audioCtx.createBiquadFilter(); rf.type = 'bandpass'; rf.frequency.value = 420; rf.Q.value = 1.0; greenRillGainNode = audioCtx.createGain(); greenRillGainNode.gain.value = 0.06; rill.connect(rf); rf.connect(greenRillGainNode); greenRillGainNode.connect(masterGain); rill.start();
-      const leaf = audioCtx.createBufferSource(); leaf.buffer = sharedNoiseBuffer; leaf.loop = true; leaf.playbackRate.value = 0.7; const lf = audioCtx.createBiquadFilter(); lf.type = 'bandpass'; lf.frequency.value = 300; lf.Q.value = 1.0; greenLeafGainNode = audioCtx.createGain(); greenLeafGainNode.gain.value = 0.06; leaf.connect(lf); lf.connect(greenLeafGainNode); greenLeafGainNode.connect(masterGain); leaf.start();
-      greenMistGainNode = audioCtx.createGain(); greenMistGainNode.gain.value = 0.05;
-      setGreenAtmosphereLevel(0.5, token); scheduleGreenMist(token); scheduleGreenCrickets(token);
+    function startNebulaSoundscape(token) {
+      masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
+      sharedNoiseBuffer = createPinkNoiseBuffer(18); sharedBrownBuffer = createBrownNoiseBuffer(18);
+      const washGain = audioCtx.createGain(); washGain.gain.value = 0.35; nebulaWashGainNode = washGain; washGain.connect(masterGain);
+      [140, 220].forEach((freq) => {
+        const src = audioCtx.createBufferSource(); src.buffer = sharedBrownBuffer; src.loop = true; src.playbackRate.value = 0.8;
+        const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = freq;
+        const lfo = audioCtx.createOscillator(); const lg = audioCtx.createGain(); lfo.type = 'sine'; lfo.frequency.value = 0.045; lg.gain.value = 20; lfo.connect(lg); lg.connect(f.frequency); lfo.start();
+        src.connect(f); f.connect(washGain); src.start();
+      });
+      const thrumGain = audioCtx.createGain(); thrumGain.gain.value = 0.20; nebulaThrumGainNode = thrumGain; thrumGain.connect(masterGain);
+      [40, 80].forEach((freq) => { const o = audioCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq; o.connect(thrumGain); o.start(); });
+      const tl = audioCtx.createOscillator(); const tlg = audioCtx.createGain(); tl.type = 'sine'; tl.frequency.value = 0.05; tlg.gain.value = 0.03; tl.connect(tlg); tlg.connect(thrumGain.gain); tl.start();
+      const vent = audioCtx.createBufferSource(); vent.buffer = sharedNoiseBuffer; vent.loop = true; const vf = audioCtx.createBiquadFilter(); vf.type = 'lowpass'; vf.frequency.value = 380; nebulaVentGainNode = audioCtx.createGain(); nebulaVentGainNode.gain.value = 0.03; vent.connect(vf); vf.connect(nebulaVentGainNode); nebulaVentGainNode.connect(masterGain); vent.start();
+      setNebulaAtmosphereLevel(0.5, token);
     }
 
-    async function runThermalSequence(token) {
+    async function runDesertSequence(token) {
       const readout = document.getElementById('stage-readout');
       if (!(await waitSeconds(3, token))) return;
       await runPreflights(readout, token);
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setThermalAtmosphereLevel(0.8, token);
-      readout.textContent = `Phase 1: Boarding Thermal Springs (Variant ${depChoice})...`;
-      
-      const playedDep = await playVoicePath(`audio/thermal_springs/${depKey}.wav`, 0.85, token);
+      setDesertAtmosphereLevel(0.85, token); setEyelidPhase('departure', token);
+      readout.textContent = `Phase 1: Boarding Desert Star-Dune Pavilion (Variant ${depChoice})...`;
+      const playedDep = await playVoicePath(`audio/desert_caravan/${depKey}.wav`, 0.83, token, null, null, 2500);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/thermal_springs/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/desert_caravan/departure_1.wav', 0.83, token, null, null, 2500);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
-        readout.textContent = `Phase 2: Thermal Springs Drift (${i + 1}/${tonightDrifts.length})`;
+        const gap = i < 8 ? randomBetween(14, 21) : randomBetween(22, 33);
+        readout.textContent = `Phase 2: Desert Star-Dune Pavilion Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setThermalAtmosphereLevel(1.0, token);
-        
-        readout.textContent = `Phase 2: Thermal Springs Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/thermal_springs/${tonightDrifts[i]}.wav`, 0.76, token);
+        if (i === 0) { setDesertAtmosphereLevel(0.95, token); setEyelidPhase('early', token); }
+        if (i === 8) { setDesertAtmosphereLevel(0.80, token); setEyelidPhase('late', token); desertLatePhase = true; }
+        readout.textContent = `Phase 2: Desert Star-Dune Pavilion Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/desert_caravan/${tonightDrifts[i]}.wav`, 0.74, token, null, null, 2500);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setThermalAtmosphereLevel(0.4, token);
+      setDesertAtmosphereLevel(0.45, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(25, 32), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/thermal_springs/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/desert_caravan/lucid_seed_${seedChoice}.wav`, 0.52, token, null, null, 2500);
       fadeOutSoundscape(readout, token);
     }
 
@@ -1313,104 +1262,103 @@
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setAirshipAtmosphereLevel(0.8, token);
+      setAirshipAtmosphereLevel(0.85, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding Cloud Airship (Variant ${depChoice})...`;
       
-      const playedDep = await playVoicePath(`audio/cloud_airship/${depKey}.wav`, 0.85, token);
+      const playedDep = await playVoicePath(`audio/cloud_airship/${depKey}.wav`, 0.85, token, null, null, 2700);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/cloud_airship/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/cloud_airship/departure_1.wav', 0.85, token, null, null, 2700);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
+        const gap = i < 8 ? randomBetween(11, 18) : randomBetween(19, 29);
         readout.textContent = `Phase 2: Airship Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setAirshipAtmosphereLevel(1.0, token);
+        if (i === 0) { setAirshipAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
+        if (i === 8) { setAirshipAtmosphereLevel(0.70, token); airshipLatePhase = true; setEyelidPhase('late', token); }
         
         readout.textContent = `Phase 2: Airship Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/cloud_airship/${tonightDrifts[i]}.wav`, 0.76, token);
+        await playVoicePath(`audio/cloud_airship/${tonightDrifts[i]}.wav`, 0.75, token, null, null, 2700);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setAirshipAtmosphereLevel(0.4, token);
+      setAirshipAtmosphereLevel(0.35, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
       if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/cloud_airship/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/cloud_airship/lucid_seed_${seedChoice}.wav`, 0.54, token, null, null, 2700);
       fadeOutSoundscape(readout, token);
     }
 
-    async function runDeepSeaSequence(token) {
+    async function runLighthouseSequence(token) {
       const readout = document.getElementById('stage-readout');
       if (!(await waitSeconds(3, token))) return;
       await runPreflights(readout, token);
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setDeepSeaAtmosphereLevel(0.8, token);
-      readout.textContent = `Phase 1: Boarding Deep Sea Observatory (Variant ${depChoice})...`;
-      
-      const playedDep = await playVoicePath(`audio/deep_sea/${depKey}.wav`, 0.85, token);
+      setLighthouseAtmosphereLevel(0.75, token); setEyelidPhase('departure', token);
+      readout.textContent = `Phase 1: Boarding Cliffside Lighthouse (Variant ${depChoice})...`;
+      const playedDep = await playVoicePath(`audio/lighthouse_watch/${depKey}.wav`, 0.82, token, null, null, 2100);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/deep_sea/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/lighthouse_watch/departure_1.wav', 0.82, token, null, null, 2100);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
-        readout.textContent = `Phase 2: Deep Sea Drift (${i + 1}/${tonightDrifts.length})`;
+        const gap = i < 8 ? randomBetween(16, 24) : randomBetween(25, 36);
+        readout.textContent = `Phase 2: Cliffside Lighthouse Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setDeepSeaAtmosphereLevel(1.0, token);
-        
-        readout.textContent = `Phase 2: Deep Sea Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/deep_sea/${tonightDrifts[i]}.wav`, 0.76, token);
+        if (i === 0) { setLighthouseAtmosphereLevel(0.85, token); setEyelidPhase('early', token); }
+        if (i === 8) { setLighthouseAtmosphereLevel(0.65, token); setEyelidPhase('late', token); lighthouseLatePhase = true; }
+        readout.textContent = `Phase 2: Cliffside Lighthouse Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/lighthouse_watch/${tonightDrifts[i]}.wav`, 0.72, token, null, null, 2100);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setDeepSeaAtmosphereLevel(0.4, token);
+      setLighthouseAtmosphereLevel(0.30, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(28, 36), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/deep_sea/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/lighthouse_watch/lucid_seed_${seedChoice}.wav`, 0.48, token, null, null, 2100);
       fadeOutSoundscape(readout, token);
     }
 
-    async function runLibrarySequence(token) {
+    async function runAtticSequence(token) {
       const readout = document.getElementById('stage-readout');
       if (!(await waitSeconds(3, token))) return;
       await runPreflights(readout, token);
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setLibraryAtmosphereLevel(0.8, token);
-      readout.textContent = `Phase 1: Boarding Library Elevator (Variant ${depChoice})...`;
-      
-      const playedDep = await playVoicePath(`audio/library_elevator/${depKey}.wav`, 0.85, token, depKey, LIBRARY_SFX_CUES);
+      setAtticAtmosphereLevel(0.80, token); setEyelidPhase('departure', token);
+      readout.textContent = `Phase 1: Boarding Attic Rain-Loft Library (Variant ${depChoice})...`;
+      const playedDep = await playVoicePath(`audio/attic_library/${depKey}.wav`, 0.85, token, null, null, 2950);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/library_elevator/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/attic_library/departure_1.wav', 0.85, token, null, null, 2950);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
-        readout.textContent = `Phase 2: Library Drift (${i + 1}/${tonightDrifts.length})`;
+        const gap = i < 8 ? randomBetween(10, 16) : randomBetween(18, 27);
+        readout.textContent = `Phase 2: Attic Rain-Loft Library Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setLibraryAtmosphereLevel(1.0, token);
-        
-        readout.textContent = `Phase 2: Library Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/library_elevator/${tonightDrifts[i]}.wav`, 0.76, token, tonightDrifts[i], LIBRARY_SFX_CUES);
+        if (i === 0) { setAtticAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
+        if (i === 8) { setAtticAtmosphereLevel(0.80, token); setEyelidPhase('late', token); atticLatePhase = true; }
+        readout.textContent = `Phase 2: Attic Rain-Loft Library Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/attic_library/${tonightDrifts[i]}.wav`, 0.76, token, null, null, 2950);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setLibraryAtmosphereLevel(0.4, token);
+      setAtticAtmosphereLevel(0.40, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
       if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/library_elevator/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/attic_library/lucid_seed_${seedChoice}.wav`, 0.55, token, null, null, 2950);
       fadeOutSoundscape(readout, token);
     }
 
@@ -1421,32 +1369,33 @@
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setSnowAtmosphereLevel(0.8, token);
+      setSnowAtmosphereLevel(0.85, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding Snowpiercer (Variant ${depChoice})...`;
       
-      const playedDep = await playVoicePath(`audio/snowpiercer/${depKey}.wav`, 0.85, token, depKey, SNOWPIERCER_SFX_CUES);
+      const playedDep = await playVoicePath(`audio/snowpiercer/${depKey}.wav`, 0.85, token, depKey, SNOWPIERCER_SFX_CUES, 2550);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/snowpiercer/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/snowpiercer/departure_1.wav', 0.85, token, null, null, 2550);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
+        const gap = i < 8 ? randomBetween(11, 17) : randomBetween(19, 29);
         readout.textContent = `Phase 2: Snowpiercer Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setSnowAtmosphereLevel(1.0, token);
+        if (i === 0) { setSnowAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
+        if (i === 8) { setSnowAtmosphereLevel(0.80, token); setEyelidPhase('late', token); }
         
         readout.textContent = `Phase 2: Snowpiercer Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/snowpiercer/${tonightDrifts[i]}.wav`, 0.76, token, tonightDrifts[i], SNOWPIERCER_SFX_CUES);
+        await playVoicePath(`audio/snowpiercer/${tonightDrifts[i]}.wav`, 0.75, token, tonightDrifts[i], SNOWPIERCER_SFX_CUES, 2550);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setSnowAtmosphereLevel(0.4, token);
+      setSnowAtmosphereLevel(0.38, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(23, 30), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/snowpiercer/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/snowpiercer/lucid_seed_${seedChoice}.wav`, 0.53, token, null, null, 2550);
       fadeOutSoundscape(readout, token);
     }
 
@@ -1457,72 +1406,73 @@
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setLanternAtmosphereLevel(0.8, token);
+      setLanternAtmosphereLevel(0.80, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding Lantern Canal (Variant ${depChoice})...`;
       
-      const playedDep = await playVoicePath(`audio/lantern_canal/${depKey}.wav`, 0.85, token, depKey, LANTERN_SFX_CUES);
+      const playedDep = await playVoicePath(`audio/lantern_canal/${depKey}.wav`, 0.84, token, depKey, LANTERN_SFX_CUES, 2750);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/lantern_canal/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/lantern_canal/departure_1.wav', 0.84, token, null, null, 2750);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
+        const gap = i < 8 ? randomBetween(12, 18) : randomBetween(20, 30);
         readout.textContent = `Phase 2: Lantern Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setLanternAtmosphereLevel(1.0, token);
+        if (i === 0) { setLanternAtmosphereLevel(0.95, token); setEyelidPhase('early', token); }
+        if (i === 8) { setLanternAtmosphereLevel(0.75, token); lanternLatePhase = true; setEyelidPhase('late', token); }
         
         readout.textContent = `Phase 2: Lantern Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/lantern_canal/${tonightDrifts[i]}.wav`, 0.76, token, tonightDrifts[i], LANTERN_SFX_CUES);
+        await playVoicePath(`audio/lantern_canal/${tonightDrifts[i]}.wav`, 0.75, token, tonightDrifts[i], LANTERN_SFX_CUES, 2750);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setLanternAtmosphereLevel(0.4, token);
+      setLanternAtmosphereLevel(0.38, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(24, 30), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/lantern_canal/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/lantern_canal/lucid_seed_${seedChoice}.wav`, 0.53, token, null, null, 2750);
       fadeOutSoundscape(readout, token);
     }
 
-    async function runGreenSequence(token) {
+    async function runNebulaSequence(token) {
       const readout = document.getElementById('stage-readout');
       if (!(await waitSeconds(3, token))) return;
       await runPreflights(readout, token);
       if (!isPlaying || token !== sessionToken) return;
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setGreenAtmosphereLevel(0.8, token);
-      readout.textContent = `Phase 1: Boarding Glasshouse (Variant ${depChoice})...`;
-      
-      const playedDep = await playVoicePath(`audio/asteroid_greenhouse/${depKey}.wav`, 0.85, token);
+      setNebulaAtmosphereLevel(0.80, token); setEyelidPhase('departure', token);
+      readout.textContent = `Phase 1: Boarding Deep-Space Nebula Cruiser (Variant ${depChoice})...`;
+      const playedDep = await playVoicePath(`audio/nebula_cruiser/${depKey}.wav`, 0.84, token, null, null, 2850);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/asteroid_greenhouse/departure_1.wav', 0.85, token);
+        await playVoicePath('audio/nebula_cruiser/departure_1.wav', 0.84, token, null, null, 2850);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
       for (let i = 0; i < tonightDrifts.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
-        readout.textContent = `Phase 2: Glasshouse Drift (${i + 1}/${tonightDrifts.length})`;
+        const gap = i < 8 ? randomBetween(13, 20) : randomBetween(21, 32);
+        readout.textContent = `Phase 2: Deep-Space Nebula Cruiser Drift (${i + 1}/${tonightDrifts.length})`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setGreenAtmosphereLevel(1.0, token);
-        
-        readout.textContent = `Phase 2: Glasshouse Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/asteroid_greenhouse/${tonightDrifts[i]}.wav`, 0.76, token);
+        if (i === 0) { setNebulaAtmosphereLevel(0.95, token); setEyelidPhase('early', token); }
+        if (i === 8) { setNebulaAtmosphereLevel(0.75, token); setEyelidPhase('late', token); }
+        readout.textContent = `Phase 2: Deep-Space Nebula Cruiser Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/nebula_cruiser/${tonightDrifts[i]}.wav`, 0.75, token, null, null, 2850);
       }
       if (!isPlaying || token !== sessionToken) return;
-      setGreenAtmosphereLevel(0.4, token);
+      setNebulaAtmosphereLevel(0.40, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      if (!(await waitSeconds(randomBetween(25, 32), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/asteroid_greenhouse/lucid_seed_${seedChoice}.wav`, 0.55, token);
+      await playVoicePath(`audio/nebula_cruiser/lucid_seed_${seedChoice}.wav`, 0.52, token, null, null, 2850);
       fadeOutSoundscape(readout, token);
     }
+
     // Plays a WAV clip with gentle 180ms fade-in/out envelope and optional described-action SFX cues
-    async function playVoicePath(filePath, volume = 0.85, token = sessionToken, clipKey = null, cueMap = null) {
+    async function playVoicePath(filePath, volume = 0.85, token = sessionToken, clipKey = null, cueMap = null, lpHz = 2800) {
       if (!isPlaying || token !== sessionToken) return false;
       try {
         const response = await fetch(filePath);
@@ -1539,7 +1489,7 @@
 
           const lowpass = audioCtx.createBiquadFilter();
           lowpass.type = 'lowpass';
-          lowpass.frequency.value = 2800;
+          lowpass.frequency.value = lpHz;
 
           // Smooth 180ms fade-in and fade-out envelope on the voice
           const voiceGain = audioCtx.createGain();
@@ -1569,12 +1519,14 @@
           }
 
           currentVoiceSource = source;
-          source.onended = () => resolve(true);
+          source.onended = () => { duckBed(false, token); resolve(true); };
+          duckBed(true, token);
           source.start();
           // Portal cue maps (Library/Snowpiercer/Lantern) fire at voice start, like Rainforest cues.
           if (cueMap && clipKey) schedulePortalCues(cueMap, clipKey, token);
         });
       } catch (e) {
+        duckBed(false, token);
         console.warn(`Skipped missing clip: ${filePath}`);
         return false;
       }
@@ -1624,12 +1576,14 @@
 
       if (masterGain && audioCtx) { masterGain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 3); }
       readout.textContent = "Phase 1: Boarding & Grounding...";
+      setEyelidPhase('departure', token);
       await playVoicePath('audio/moon_bus/departure.wav', 0.85, token);
 
       const driftClips = shuffle(['drift_1', 'drift_2', 'drift_3', 'drift_4', 'drift_5', 'drift_6']);
       for (let i = 0; i < driftClips.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
-        if (i === 3) { moonPingEnabled = false; clearTimeout(moonPingTimeoutId); }
+        if (i === 0) setEyelidPhase('early', token);
+        if (i === 3) { moonPingEnabled = false; clearTimeout(moonPingTimeoutId); setEyelidPhase('late', token); }
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length}) — Ambient Pause`;
         if (!(await waitSeconds(randomBetween(12, 19), token))) return;
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length})`;
@@ -1638,6 +1592,7 @@
 
       if (!isPlaying || token !== sessionToken) return;
       if (masterGain && audioCtx) { masterGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3); }
+      setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
       if (!(await waitSeconds(randomBetween(20, 26), token))) return;
       readout.textContent = "Phase 3: Planting Lucid Seed...";
@@ -1655,7 +1610,7 @@
       // Phase 1: Pick 1 of 3 Rotating Departures (with real fallback to departure_1)
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
-      setAtmosphereLevel(0.8, token);
+      setAtmosphereLevel(0.8, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding Sleeper Car (Variant ${depChoice})...`;
       const playedDep = await playVoicePath(`audio/rainforest/${depKey}.wav`, 0.85, token, depKey);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
@@ -1671,7 +1626,8 @@
         const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length}) — Rain & Rails`;
         if (!(await waitSeconds(gap, token))) return;
-        if (i === 0) setAtmosphereLevel(1.0, token);
+        if (i === 0) { setAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
+        if (i === 8) setEyelidPhase('late', token);
         const clipKey = tonightDrifts[i];
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length})`;
         await playVoicePath(`audio/rainforest/${clipKey}.wav`, 0.76, token, clipKey);
@@ -1679,7 +1635,7 @@
 
       // Phase 3: Pick 1 of 3 Rotating Lucid Seeds
       if (!isPlaying || token !== sessionToken) return;
-      setAtmosphereLevel(0.4, token);
+      setAtmosphereLevel(0.4, token); setEyelidPhase('lucid', token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
       if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
@@ -1707,13 +1663,13 @@
       document.getElementById('moon-bus-card').classList.remove('playing');
       document.getElementById('rainforest-card').classList.remove('playing');
       document.getElementById('sailboat-card').classList.remove('playing');
-      document.getElementById('thermal-card').classList.remove('playing');
+      document.getElementById('desert-card').classList.remove('playing');
       document.getElementById('airship-card').classList.remove('playing');
-      document.getElementById('deepsea-card').classList.remove('playing');
-      document.getElementById('library-card').classList.remove('playing');
+      document.getElementById('lighthouse-card').classList.remove('playing');
+      document.getElementById('attic-card').classList.remove('playing');
       document.getElementById('snowpiercer-card').classList.remove('playing');
       document.getElementById('lantern-card').classList.remove('playing');
-      document.getElementById('greenhouse-card').classList.remove('playing');
+      document.getElementById('nebula-card').classList.remove('playing');
       document.getElementById('stage-readout').textContent = message;
       if (currentVoiceSource) {
         try { currentVoiceSource.stop(); } catch (e) {}
@@ -1728,14 +1684,14 @@
       clearTimeout(frogTimeoutId);
       clearTimeout(sailboatCreakTimeoutId);
       sailboatWaterGainNode = null; sailboatWindGainNode = null; sailboatCabinGainNode = null;
-      clearTimeout(thermalCricketTimeoutId); thermalWaterGainNode = null; thermalSnowGainNode = null; thermalCabinGainNode = null;
+      clearTimeout(desertBillowTimeoutId); desertBreezeGainNode = null; desertEarthGainNode = null;
       clearTimeout(airshipCreakTimeoutId); airshipPropGainNode = null; airshipMistGainNode = null; airshipWarmGainNode = null;
-      clearTimeout(deepSurgeTimeoutId); clearTimeout(deepCanyonTimeoutId); deepSurgeGainNode = null; deepSiltGainNode = null; deepCabinGainNode = null;
-      clearTimeout(libraryFloorTimeoutId); clearTimeout(libraryHearthTimeoutId); libraryHumGainNode = null; libraryRainGainNode = null; libraryRainFilterNode = null;
+      clearTimeout(lighthouseSurfTimeoutId); clearTimeout(lighthouseGearTimeoutId); lighthouseFogGainNode = null;
+      clearTimeout(atticHearthTimeoutId); atticRainGainNode = null; atticTimberGainNode = null; atticResGainNode = null;
       clearTimeout(snowRailTimeoutId); snowWindGainNode = null; snowRadiatorGainNode = null; snowCabinGainNode = null;
-      clearTimeout(lanternOarTimeoutId); clearTimeout(lanternCricketTimeoutId); clearTimeout(lanternFrogTimeoutId); lanternWaterGainNode = null;
-      clearTimeout(greenMistTimeoutId); clearTimeout(greenCricketTimeoutId); greenHumGainNode = null; greenMistGainNode = null; greenRillGainNode = null; greenLeafGainNode = null;
-      rainGainNode = null; insectMasterGain = null; atmosphereLevel = 1.0;
+      clearTimeout(lanternOarTimeoutId); clearTimeout(lanternCricketTimeoutId); clearTimeout(lanternFrogTimeoutId); lanternWaterGainNode = null; lanternHullGainNode = null;
+      nebulaWashGainNode = null; nebulaThrumGainNode = null; nebulaVentGainNode = null;
+      rainGainNode = null; insectMasterGain = null; atmosphereLevel = 1.0; bedMidFilter = null; bedFilter = null;
       sfxTimeouts.forEach(clearTimeout);
       sfxTimeouts = [];
       if (audioCtx) {
@@ -1755,6 +1711,7 @@
       activePortal = portalKey;
       const currentToken = ++sessionToken;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      initBedBus();
 
       if (portalKey === 'moon_bus') {
         document.getElementById('moon-bus-card').classList.add('playing');
@@ -1768,22 +1725,22 @@
         document.getElementById('sailboat-card').classList.add('playing');
         startSailboatSoundscape(currentToken);
         runSailboatSequence(currentToken);
-      } else if (portalKey === 'thermal') {
-        document.getElementById('thermal-card').classList.add('playing');
-        startThermalSoundscape(currentToken);
-        runThermalSequence(currentToken);
+      } else if (portalKey === 'desert_caravan') {
+        document.getElementById('desert-card').classList.add('playing');
+        startDesertSoundscape(currentToken);
+        runDesertSequence(currentToken);
       } else if (portalKey === 'airship') {
         document.getElementById('airship-card').classList.add('playing');
         startAirshipSoundscape(currentToken);
         runAirshipSequence(currentToken);
-      } else if (portalKey === 'deep_sea') {
-        document.getElementById('deepsea-card').classList.add('playing');
-        startDeepSeaSoundscape(currentToken);
-        runDeepSeaSequence(currentToken);
-      } else if (portalKey === 'library') {
-        document.getElementById('library-card').classList.add('playing');
-        startLibrarySoundscape(currentToken);
-        runLibrarySequence(currentToken);
+      } else if (portalKey === 'lighthouse_watch') {
+        document.getElementById('lighthouse-card').classList.add('playing');
+        startLighthouseSoundscape(currentToken);
+        runLighthouseSequence(currentToken);
+      } else if (portalKey === 'attic_library') {
+        document.getElementById('attic-card').classList.add('playing');
+        startAtticSoundscape(currentToken);
+        runAtticSequence(currentToken);
       } else if (portalKey === 'snowpiercer') {
         document.getElementById('snowpiercer-card').classList.add('playing');
         startSnowSoundscape(currentToken);
@@ -1792,10 +1749,10 @@
         document.getElementById('lantern-card').classList.add('playing');
         startLanternSoundscape(currentToken);
         runLanternSequence(currentToken);
-      } else if (portalKey === 'greenhouse') {
-        document.getElementById('greenhouse-card').classList.add('playing');
-        startGreenSoundscape(currentToken);
-        runGreenSequence(currentToken);
+      } else if (portalKey === 'nebula_cruiser') {
+        document.getElementById('nebula-card').classList.add('playing');
+        startNebulaSoundscape(currentToken);
+        runNebulaSequence(currentToken);
       }
     }
   </script>
