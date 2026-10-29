@@ -7,12 +7,14 @@
   <style>
     :root {
       --bg: #000000;
-      --card: #0a0a0f;
+      --card: #0b0b11;
       --border: #1a1b26;
       --accent: #7aa2f7;
       --accent-green: #73daca;
       --text: #a9b1d6;
+      --text-bright: #c0caf5;
       --muted: #565f89;
+      --serif: Georgia, "Times New Roman", serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -24,28 +26,30 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: max(28px, env(safe-area-inset-top)) 24px max(36px, env(safe-area-inset-bottom));
       user-select: none;
     }
     .header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
     .header h1 {
-      font-size: 1.25rem;
+      font-family: var(--serif);
+      font-size: 1.9rem;
       font-weight: 400;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      margin-bottom: 6px;
+      letter-spacing: 0.12em;
+      color: var(--text-bright);
+      margin-bottom: 10px;
     }
     .header p {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--muted);
+      letter-spacing: 0.03em;
     }
     .toggles {
       display: flex;
-      gap: 10px;
-      margin-bottom: 28px;
+      gap: 12px;
+      margin-bottom: 32px;
       flex-wrap: wrap;
       justify-content: center;
     }
@@ -53,66 +57,93 @@
       background: var(--card);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 8px 14px;
+      padding: 11px 19px;
+      min-height: 44px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: border-color 0.4s ease, color 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
     }
     .pill.active {
       border-color: var(--accent);
       color: var(--accent);
-      background: rgba(122, 162, 247, 0.08);
+      background: rgba(122, 162, 247, 0.10);
+      box-shadow: 0 0 18px rgba(122, 162, 247, 0.10);
     }
     .portal-grid {
       width: 100%;
-      max-width: 420px;
+      max-width: 460px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
     .portal-card {
+      position: relative;
+      overflow: hidden;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px 24px;
+      border-radius: 20px;
+      padding: 20px 22px;
+      min-height: 68px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+    }
+    .portal-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--border);
+      transition: background-color 0.4s ease;
     }
     .portal-card:hover {
       border-color: #2f334d;
+      transform: translateY(-2px);
     }
     .portal-card.playing {
       border-color: var(--accent);
       box-shadow: 0 0 25px rgba(122, 162, 247, 0.08);
     }
+    .portal-card.playing::before { background: var(--accent); }
     .portal-card.rainforest.playing {
       border-color: var(--accent-green);
       box-shadow: 0 0 25px rgba(115, 218, 202, 0.08);
     }
+    .portal-card.rainforest.playing::before { background: var(--accent-green); }
     .portal-info h2 {
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       font-weight: 500;
-      color: #c0caf5;
-      margin-bottom: 4px;
+      color: var(--text-bright);
+      margin-bottom: 5px;
+      letter-spacing: 0.01em;
     }
     .portal-info span {
       font-size: 0.8rem;
       color: var(--muted);
+      line-height: 1.4;
     }
     .status-dot {
+      flex: none;
       width: 10px;
       height: 10px;
       border-radius: 50%;
       background: var(--border);
-      transition: all 0.3s ease;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: 0.55; transform: scale(0.92); }
+      50% { opacity: 1; transform: scale(1.08); }
     }
     .portal-card.playing .status-dot {
       background: var(--accent);
       box-shadow: 0 0 12px var(--accent);
+      animation: breathe 4s ease-in-out infinite;
     }
     .portal-card.rainforest.playing .status-dot {
       background: var(--accent-green);
@@ -126,34 +157,56 @@
       background: #7dcfff;
       box-shadow: 0 0 12px #7dcfff;
     }
+    .portal-card.sailboat.playing::before { background: #7dcfff; }
     .portal-card.thermal.playing { border-color: #ff9a7a; box-shadow: 0 0 25px rgba(255,154,122,0.08); }
     .portal-card.thermal.playing .status-dot { background: #ff9a7a; box-shadow: 0 0 12px #ff9a7a; }
+    .portal-card.thermal.playing::before { background: #ff9a7a; }
     .portal-card.airship.playing { border-color: #c0a0ff; box-shadow: 0 0 25px rgba(192,160,255,0.08); }
     .portal-card.airship.playing .status-dot { background: #c0a0ff; box-shadow: 0 0 12px #c0a0ff; }
+    .portal-card.airship.playing::before { background: #c0a0ff; }
     .portal-card.deepsea.playing { border-color: #4db8ff; box-shadow: 0 0 25px rgba(77,184,255,0.08); }
     .portal-card.deepsea.playing .status-dot { background: #4db8ff; box-shadow: 0 0 12px #4db8ff; }
+    .portal-card.deepsea.playing::before { background: #4db8ff; }
     .portal-card.library.playing { border-color: #e8c07a; box-shadow: 0 0 25px rgba(232,192,122,0.08); }
     .portal-card.library.playing .status-dot { background: #e8c07a; box-shadow: 0 0 12px #e8c07a; }
+    .portal-card.library.playing::before { background: #e8c07a; }
     .portal-card.snowpiercer.playing { border-color: #a0d8ff; box-shadow: 0 0 25px rgba(160,216,255,0.08); }
     .portal-card.snowpiercer.playing .status-dot { background: #a0d8ff; box-shadow: 0 0 12px #a0d8ff; }
+    .portal-card.snowpiercer.playing::before { background: #a0d8ff; }
     .portal-card.lantern.playing { border-color: #ffb86b; box-shadow: 0 0 25px rgba(255,184,107,0.08); }
     .portal-card.lantern.playing .status-dot { background: #ffb86b; box-shadow: 0 0 12px #ffb86b; }
+    .portal-card.lantern.playing::before { background: #ffb86b; }
     .portal-card.greenhouse.playing { border-color: #8fe8a0; box-shadow: 0 0 25px rgba(143,232,160,0.08); }
     .portal-card.greenhouse.playing .status-dot { background: #8fe8a0; box-shadow: 0 0 12px #8fe8a0; }
+    .portal-card.greenhouse.playing::before { background: #8fe8a0; }
     #stage-readout {
-      margin-top: 28px;
-      font-size: 0.8rem;
+      margin-top: 32px;
+      font-size: 0.85rem;
       color: var(--muted);
-      height: 20px;
-      letter-spacing: 0.04em;
+      min-height: 20px;
+      letter-spacing: 0.06em;
       text-align: center;
+    }
+    .quiet-footer {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      .portal-card:hover { transform: none; }
     }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <h1>DREAM PORTALS</h1>
+    <h1>Dream Portals</h1>
     <p>Tap a destination and close your eyes</p>
   </div>
 
@@ -168,7 +221,7 @@
     <div class="portal-card" id="moon-bus-card" onclick="togglePortal('moon_bus')">
       <div class="portal-info">
         <h2>🚌 Bus to the Moon</h2>
-        <span>Sub-bass cabin hum • Theta wave drift</span>
+        <span>Low cabin hum • Quiet starlight drift</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -247,6 +300,8 @@
   </div>
 
   <div id="stage-readout">Ready for departure</div>
+
+  <div class="quiet-footer">10 journeys • Fades to silence</div>
 
   <script>
     let audioCtx = null;
