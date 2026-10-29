@@ -181,6 +181,7 @@
     let frogTimeoutId = null;
     let atmosphereLevel = 1.0;
     let moonPingTimeoutId = null;
+    let moonPingEnabled = true;
     let moonAirGainNode = null;
 
     // Subtle Described-Action Sound Cue Map for Rainforest Train
@@ -446,17 +447,17 @@
 
     // --- Moon Bus Atmosphere (v4, soft cabin only — never wake them) ---
     function scheduleMoonPing(token) {
-      if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
+      if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain || !moonPingEnabled) return;
       const nextMs = randomBetween(30000, 60000);
       moonPingTimeoutId = setTimeout(() => {
-        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleMoonPing(token); return; }
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain || !moonPingEnabled) return;
         const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880 + Math.random() * 120, now);
+        osc.frequency.setValueAtTime(700 + Math.random() * 80, now); // <800 Hz per fresh-window audit
         g.gain.setValueAtTime(0.001, now);
-        g.gain.linearRampToValueAtTime(0.012, now + 0.3);
+        g.gain.linearRampToValueAtTime(0.010, now + 0.3);
         g.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
         osc.connect(g); g.connect(masterGain);
         osc.start(now); osc.stop(now + 2.1);
@@ -711,6 +712,7 @@
       const driftClips = shuffle(['drift_1', 'drift_2', 'drift_3', 'drift_4', 'drift_5', 'drift_6']);
       for (let i = 0; i < driftClips.length; i++) {
         if (!isPlaying || token !== sessionToken) return;
+        if (i === 3) { moonPingEnabled = false; clearTimeout(moonPingTimeoutId); }
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length}) — Ambient Pause`;
         if (!(await waitSeconds(randomBetween(12, 19), token))) return;
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length})`;
@@ -794,7 +796,7 @@
       }
       clearTimeout(timerId);
       clearTimeout(clackTimeoutId);
-      clearTimeout(moonPingTimeoutId);
+      clearTimeout(moonPingTimeoutId); moonPingEnabled = true;
       moonAirGainNode = null;
       clearTimeout(insectTimeoutId);
       clearTimeout(leafTimeoutId);
