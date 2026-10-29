@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Portals — Portal #2 Test Player</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #0a0a0f;
+      --border: #1a1b26;
+      --accent: #7aa2f7;
+      --accent-green: #73daca;
+      --text: #a9b1d6;
+      --muted: #565f89;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      user-select: none;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .toggles {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(122, 162, 247, 0.08);
+    }
+    .portal-grid {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .portal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .portal-card:hover {
+      border-color: #2f334d;
+    }
+    .portal-card.playing {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px rgba(122, 162, 247, 0.08);
+    }
+    .portal-card.rainforest.playing {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 25px rgba(115, 218, 202, 0.08);
+    }
+    .portal-info h2 {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #c0caf5;
+      margin-bottom: 4px;
+    }
+    .portal-info span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s ease;
+    }
+    .portal-card.playing .status-dot {
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .portal-card.rainforest.playing .status-dot {
+      background: var(--accent-green);
+      box-shadow: 0 0 12px var(--accent-green);
+    }
+    #stage-readout {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      height: 20px;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>DREAM PORTALS</h1>
+    <p>Tap a destination and close your eyes</p>
+  </div>
+
+  <!-- Optional Pre-Flight Add-On Toggles -->
+  <div class="toggles">
+    <button class="pill" id="pill-unwind" onclick="this.classList.toggle('active')">+ 3m Body Unwind</button>
+    <button class="pill" id="pill-shuffle" onclick="this.classList.toggle('active')">+ 5m Mind Shuffle</button>
+  </div>
+
+  <!-- Portal Cards -->
+  <div class="portal-grid">
+    <div class="portal-card" id="moon-bus-card" onclick="togglePortal('moon_bus')">
+      <div class="portal-info">
+        <h2>🚌 Bus to the Moon</h2>
+        <span>Sub-bass cabin hum • Theta wave drift</span>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+
+    <div class="portal-card rainforest" id="rainforest-card" onclick="togglePortal('rainforest')">
+      <div class="portal-info">
+        <h2>🚂 Train to the Rainforest</h2>
+        <span>Warm rain on roof • Soft rail rhythm</span>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+  </div>
+
+  <div id="stage-readout">Ready for departure</div>
+
+  <script>
+    let audioCtx = null;
+    let masterGain = null;
+    let isPlaying = false;
+    let activePortal = null;
+    let currentVoiceSource = null;
+    let timerId = null;
+    let trackIntervalId = null;
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function randomBetween(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // 1. Lunar Bus Soundscape (55Hz Sub-Bass + 4Hz Theta Binaural Beat)
+    function startLunarBusSoundscape() {
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 4);
+      masterGain.connect(audioCtx.destination);
+
+      const subOsc = audioCtx.createOscillator();
+      subOsc.type = 'sine';
+      subOsc.frequency.value = 55;
+      subOsc.connect(masterGain);
+      subOsc.start();
+
+      const merger = audioCtx.createChannelMerger(2);
+      const leftOsc = audioCtx.createOscillator();
+      const rightOsc = audioCtx.createOscillator();
+      const binauralGain = audioCtx.createGain();
+      binauralGain.gain.value = 0.08;
+
+      leftOsc.frequency.value = 110;
+      rightOsc.frequency.value = 114;
+      leftOsc.connect(merger, 0, 0);
+      rightOsc.connect(merger, 0, 1);
+      merger.connect(binauralGain);
+      binauralGain.connect(masterGain);
+
+      leftOsc.start();
+      rightOsc.start();
+    }
+
+    // 2. Rainforest Sleeper Train Soundscape (Warm Rain on Roof + Soft Rail Clack + Cabin Hum)
+    function startRainforestSoundscape() {
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4);
+      masterGain.connect(audioCtx.destination);
+
+      // A. Warm Wooden Cabin Resonance (62Hz) + 4Hz Theta Binaural Drift
+      const cabinOsc = audioCtx.createOscillator();
+      cabinOsc.type = 'sine';
+      cabinOsc.frequency.value = 62;
+      const cabinGain = audioCtx.createGain();
+      cabinGain.gain.value = 0.45;
+      cabinOsc.connect(cabinGain);
+      cabinGain.connect(masterGain);
+      cabinOsc.start();
+
+      const merger = audioCtx.createChannelMerger(2);
+      const leftOsc = audioCtx.createOscillator();
+      const rightOsc = audioCtx.createOscillator();
+      const binauralGain = audioCtx.createGain();
+      binauralGain.gain.value = 0.05;
+      leftOsc.frequency.value = 108;
+      rightOsc.frequency.value = 112;
+      leftOsc.connect(merger, 0, 0);
+      rightOsc.connect(merger, 0, 1);
+      merger.connect(binauralGain);
+      binauralGain.connect(masterGain);
+      leftOsc.start();
+      rightOsc.start();
+
+      // B. Continuous Warm Tropical Rain on Roof (Filtered Pink Noise)
+      const bufferSize = audioCtx.sampleRate * 4;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.03;
+        b6 = white * 0.115926;
+      }
+      const rainSource = audioCtx.createBufferSource();
+      rainSource.buffer = noiseBuffer;
+      rainSource.loop = true;
+
+      const rainFilter = audioCtx.createBiquadFilter();
+      rainFilter.type = 'lowpass';
+      rainFilter.frequency.value = 1100; // Muffled roof warmth
+
+      const rainGain = audioCtx.createGain();
+      rainGain.gain.value = 0.55;
+      rainSource.connect(rainFilter);
+      rainFilter.connect(rainGain);
+      rainGain.connect(masterGain);
+      rainSource.start();
+
+      // C. Soft Muffled Rail Clack-Clack (Every 2.4 seconds)
+      function triggerRailClack() {
+        if (!isPlaying || !audioCtx) return;
+        const now = audioCtx.currentTime;
+        [0, 0.22].forEach((offset) => {
+          const osc = audioCtx.createOscillator();
+          const clickGain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(78, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(38, now + offset + 0.07);
+
+          clickGain.gain.setValueAtTime(0.001, now + offset);
+          clickGain.gain.linearRampToValueAtTime(0.14, now + offset + 0.01);
+          clickGain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.09);
+
+          osc.connect(clickGain);
+          clickGain.connect(masterGain);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.1);
+        });
+      }
+      trackIntervalId = setInterval(triggerRailClack, 2400);
+    }
+
+    // Plays any WAV file through the 2800Hz Low-Pass Warmth Filter
+    async function playVoicePath(filePath, volume = 0.85) {
+      if (!isPlaying) return;
+      try {
+        const response = await fetch(filePath);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        return new Promise((resolve) => {
+          if (!isPlaying) return resolve();
+
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffer;
+
+          const lowpass = audioCtx.createBiquadFilter();
+          lowpass.type = 'lowpass';
+          lowpass.frequency.value = 2800;
+
+          const voiceGain = audioCtx.createGain();
+          voiceGain.gain.value = volume;
+
+          source.connect(lowpass);
+          lowpass.connect(voiceGain);
+          voiceGain.connect(audioCtx.destination);
+
+          currentVoiceSource = source;
+          source.onended = () => resolve();
+          source.start();
+        });
+      } catch (e) {
+        console.warn(`Skipped missing clip: ${filePath}`);
+      }
+    }
+
+    function waitSeconds(sec) {
+      return new Promise((resolve) => {
+        timerId = setTimeout(resolve, sec * 1000);
+      });
+    }
+
+    // Runs optional Pre-Flight warm-ups if their pills are active
+    async function runPreflights(readout) {
+      const unwindActive = document.getElementById('pill-unwind').classList.contains('active');
+      const shuffleActive = document.getElementById('pill-shuffle').classList.contains('active');
+
+      if (unwindActive && isPlaying) {
+        for (let i = 1; i <= 10; i++) {
+          if (!isPlaying) return;
+          const stepNum = String(i).padStart(2, '0');
+          readout.textContent = `Pre-Flight: Body Unwind (${i}/10)`;
+          await playVoicePath(`audio/preflight/body_unwind/step_${stepNum}.wav`, 0.82);
+          if (!isPlaying) return;
+          await waitSeconds(8);
+        }
+      }
+
+      if (shuffleActive && isPlaying) {
+        const pool = Array.from({ length: 40 }, (_, i) => String(i + 1).padStart(2, '0'));
+        const tonightObjects = shuffle(pool).slice(0, 25);
+        for (let i = 0; i < tonightObjects.length; i++) {
+          if (!isPlaying) return;
+          readout.textContent = `Pre-Flight: Mind Shuffle (${i + 1}/25)`;
+          await playVoicePath(`audio/preflight/mind_shuffle/obj_${tonightObjects[i]}.wav`, 0.78);
+          if (!isPlaying) return;
+          await waitSeconds(randomBetween(6, 10));
+        }
+      }
+    }
+
+    async function runMoonBusSequence() {
+      const readout = document.getElementById('stage-readout');
+      await waitSeconds(3);
+      await runPreflights(readout);
+      if (!isPlaying) return;
+
+      readout.textContent = "Phase 1: Boarding & Grounding...";
+      await playVoicePath('audio/moon_bus/departure.wav', 0.85);
+
+      const driftClips = shuffle(['drift_1', 'drift_2', 'drift_3', 'drift_4', 'drift_5', 'drift_6']);
+      for (let i = 0; i < driftClips.length; i++) {
+        if (!isPlaying) return;
+        const pause = randomBetween(11, 18);
+        readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length}) — Ambient Pause`;
+        await waitSeconds(pause);
+        if (!isPlaying) return;
+        readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length})`;
+        await playVoicePath(`audio/moon_bus/${driftClips[i]}.wav`, 0.78);
+      }
+
+      if (!isPlaying) return;
+      readout.textContent = "Phase 3: Deepening Hypnagogia...";
+      await waitSeconds(20);
+      if (!isPlaying) return;
+      readout.textContent = "Phase 3: Planting Lucid Seed...";
+      await playVoicePath('audio/moon_bus/lucid_seed.wav', 0.55);
+
+      fadeOutSoundscape(readout);
+    }
+
+    async function runRainforestSequence() {
+      const readout = document.getElementById('stage-readout');
+      await waitSeconds(3);
+      await runPreflights(readout);
+      if (!isPlaying) return;
+
+      // Phase 1: Pick 1 of 3 Rotating Departures (fallback to departure_1 if others aren't rendered yet)
+      const depChoice = randomBetween(1, 3);
+      readout.textContent = `Phase 1: Boarding Sleeper Car (Variant ${depChoice})...`;
+      await playVoicePath(`audio/rainforest/departure_${depChoice}.wav`, 0.85);
+
+      // Phase 2: Shuffle 30 Micro-Drifts and deal 18 with progressive random silence gaps
+      const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
+      const tonightDrifts = shuffle(allDrifts).slice(0, 18);
+
+      for (let i = 0; i < tonightDrifts.length; i++) {
+        if (!isPlaying) return;
+        const gap = i < 8 ? randomBetween(9, 16) : randomBetween(16, 26);
+        readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length}) — Rain & Rails`;
+        await waitSeconds(gap);
+        if (!isPlaying) return;
+        readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/rainforest/${tonightDrifts[i]}.wav`, 0.76);
+      }
+
+      // Phase 3: Pick 1 of 3 Rotating Lucid Seeds
+      if (!isPlaying) return;
+      readout.textContent = "Phase 3: Deepening Hypnagogia...";
+      await waitSeconds(24);
+      if (!isPlaying) return;
+      const seedChoice = randomBetween(1, 3);
+      readout.textContent = "Phase 3: Planting Lucid Seed...";
+      await playVoicePath(`audio/rainforest/lucid_seed_${seedChoice}.wav`, 0.55);
+
+      fadeOutSoundscape(readout);
+    }
+
+    function fadeOutSoundscape(readout) {
+      if (!isPlaying || !audioCtx || !masterGain) return;
+      readout.textContent = "Phase 4: 8-Minute Soundscape Fade to Silence";
+      const fadeSeconds = 480; // 8 minutes
+      masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + fadeSeconds);
+      timerId = setTimeout(() => {
+        if (isPlaying) stopSession("Session complete — Goodnight");
+      }, fadeSeconds * 1000);
+    }
+
+    function stopSession(message = "Session paused") {
+      isPlaying = false;
+      activePortal = null;
+      document.getElementById('moon-bus-card').classList.remove('playing');
+      document.getElementById('rainforest-card').classList.remove('playing');
+      document.getElementById('stage-readout').textContent = message;
+      if (currentVoiceSource) {
+        try { currentVoiceSource.stop(); } catch (e) {}
+      }
+      clearTimeout(timerId);
+      clearInterval(trackIntervalId);
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+    }
+
+    function togglePortal(portalKey) {
+      if (isPlaying) {
+        const wasSame = activePortal === portalKey;
+        stopSession();
+        if (wasSame) return;
+      }
+
+      isPlaying = true;
+      activePortal = portalKey;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      if (portalKey === 'moon_bus') {
+        document.getElementById('moon-bus-card').classList.add('playing');
+        startLunarBusSoundscape();
+        runMoonBusSequence();
+      } else if (portalKey === 'rainforest') {
+        document.getElementById('rainforest-card').classList.add('playing');
+        startRainforestSoundscape();
+        runRainforestSequence();
+      }
+    }
+  </script>
+</body>
+</html>
