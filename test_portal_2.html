@@ -118,6 +118,14 @@
       background: var(--accent-green);
       box-shadow: 0 0 12px var(--accent-green);
     }
+    .portal-card.sailboat.playing {
+      border-color: #7dcfff;
+      box-shadow: 0 0 25px rgba(125, 207, 255, 0.08);
+    }
+    .portal-card.sailboat.playing .status-dot {
+      background: #7dcfff;
+      box-shadow: 0 0 12px #7dcfff;
+    }
     #stage-readout {
       margin-top: 28px;
       font-size: 0.8rem;
@@ -158,6 +166,14 @@
       </div>
       <div class="status-dot"></div>
     </div>
+
+    <div class="portal-card sailboat" id="sailboat-card" onclick="togglePortal('sailboat')">
+      <div class="portal-info">
+        <h2>⛵ Sailboat on a Quiet Bay</h2>
+        <span>Water lap • Hull creak • Night wind</span>
+      </div>
+      <div class="status-dot"></div>
+    </div>
   </div>
 
   <div id="stage-readout">Ready for departure</div>
@@ -183,6 +199,10 @@
     let moonPingTimeoutId = null;
     let moonPingEnabled = true;
     let moonAirGainNode = null;
+    let sailboatWaterGainNode = null;
+    let sailboatWindGainNode = null;
+    let sailboatCabinGainNode = null;
+    let sailboatCreakTimeoutId = null;
 
     // Subtle Described-Action Sound Cue Map for Rainforest Train
     const RAINFOREST_SFX_CUES = {
@@ -606,6 +626,172 @@
       scheduleFrog(token);
     }
 
+    // --- Sailboat on a Quiet Bay Soundscape (Portal 3, drafted from its scripts) ---
+    // Layers, all soft, steady, and getting quieter by phase — don't-wake rule:
+    // 1. water lap (low-passed pink noise, 320 Hz) — the bay against the cedar hull
+    // 2. night wind (bandpass noise, slow 220-380 Hz sweep) — breeze over the cove
+    // 3. wooden cabin resonance (58 Hz) — the hull itself, like Rainforest's 62 Hz cabin
+    // 4. sparse hull creak (every 9-14s, low triangle, never a clank, snap, or bell)
+    // No halyard clanking, canvas snapping, buoy bells, gulls, or motor sounds.
+    // Phase levels mirror Rainforest: preflight 0.5, departure 0.8, drifts 1.0, lucid 0.4.
+    function setSailboatAtmosphereLevel(level, token) {
+      if (token !== sessionToken) return;
+      atmosphereLevel = level;
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      if (sailboatWaterGainNode) {
+        sailboatWaterGainNode.gain.cancelScheduledValues(now);
+        sailboatWaterGainNode.gain.setValueAtTime(sailboatWaterGainNode.gain.value, now);
+        sailboatWaterGainNode.gain.linearRampToValueAtTime(0.35 + level * 0.30, now + 3);
+      }
+      if (sailboatWindGainNode) {
+        sailboatWindGainNode.gain.cancelScheduledValues(now);
+        sailboatWindGainNode.gain.setValueAtTime(sailboatWindGainNode.gain.value, now);
+        sailboatWindGainNode.gain.linearRampToValueAtTime(0.04 + level * 0.04, now + 3);
+      }
+      if (sailboatCabinGainNode) {
+        sailboatCabinGainNode.gain.cancelScheduledValues(now);
+        sailboatCabinGainNode.gain.setValueAtTime(sailboatCabinGainNode.gain.value, now);
+        sailboatCabinGainNode.gain.linearRampToValueAtTime(0.20 + level * 0.15, now + 3);
+      }
+    }
+
+    function scheduleSailboatCreak(token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx) return;
+      const nextMs = randomBetween(9000, 14000);
+      sailboatCreakTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) { scheduleSailboatCreak(token); return; }
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(105, now);
+        osc.frequency.linearRampToValueAtTime(82, now + 1.0);
+        osc.frequency.linearRampToValueAtTime(96, now + 2.0);
+        filter.type = 'lowpass';
+        filter.frequency.value = 220;
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.05 * atmosphereLevel, now + 0.7);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 2.1);
+        osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
+        osc.start(now); osc.stop(now + 2.2);
+        scheduleSailboatCreak(token);
+      }, nextMs);
+    }
+
+    function startSailboatSoundscape(token) {
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4);
+      masterGain.connect(audioCtx.destination);
+
+      // Wooden cabin / hull resonance (58 Hz)
+      const cabinOsc = audioCtx.createOscillator();
+      cabinOsc.type = 'sine';
+      cabinOsc.frequency.value = 58;
+      sailboatCabinGainNode = audioCtx.createGain();
+      sailboatCabinGainNode.gain.value = 0.27;
+      cabinOsc.connect(sailboatCabinGainNode);
+      sailboatCabinGainNode.connect(masterGain);
+      cabinOsc.start();
+
+      sharedNoiseBuffer = createPinkNoiseBuffer(18);
+
+      // Water lap: looped pink noise, low-passed at 320 Hz, slow tidal swell via LFO
+      const waterSource = audioCtx.createBufferSource();
+      waterSource.buffer = sharedNoiseBuffer;
+      waterSource.loop = true;
+      const waterFilter = audioCtx.createBiquadFilter();
+      waterFilter.type = 'lowpass';
+      waterFilter.frequency.value = 320;
+      sailboatWaterGainNode = audioCtx.createGain();
+      sailboatWaterGainNode.gain.value = 0.50;
+      const waterLfo = audioCtx.createOscillator();
+      const waterLfoGain = audioCtx.createGain();
+      waterLfo.type = 'sine';
+      waterLfo.frequency.value = 0.08;
+      waterLfoGain.gain.value = 0.06;
+      waterLfo.connect(waterLfoGain);
+      waterLfoGain.connect(sailboatWaterGainNode.gain);
+      waterLfo.start();
+      waterSource.connect(waterFilter);
+      waterFilter.connect(sailboatWaterGainNode);
+      sailboatWaterGainNode.connect(masterGain);
+      waterSource.start();
+
+      // Night wind: second looped noise source, bandpass sweeping slowly 220-380 Hz
+      const windSource = audioCtx.createBufferSource();
+      windSource.buffer = sharedNoiseBuffer;
+      windSource.loop = true;
+      windSource.playbackRate.value = 0.7;
+      const windFilter = audioCtx.createBiquadFilter();
+      windFilter.type = 'bandpass';
+      windFilter.frequency.value = 300;
+      windFilter.Q.value = 1.0;
+      const windLfo = audioCtx.createOscillator();
+      const windLfoGain = audioCtx.createGain();
+      windLfo.type = 'sine';
+      windLfo.frequency.value = 0.05;
+      windLfoGain.gain.value = 80;
+      windLfo.connect(windLfoGain);
+      windLfoGain.connect(windFilter.frequency);
+      windLfo.start();
+      sailboatWindGainNode = audioCtx.createGain();
+      sailboatWindGainNode.gain.value = 0.06;
+      windSource.connect(windFilter);
+      windFilter.connect(sailboatWindGainNode);
+      sailboatWindGainNode.connect(masterGain);
+      windSource.start();
+
+      setSailboatAtmosphereLevel(0.5, token);
+      scheduleSailboatCreak(token);
+    }
+
+    async function runSailboatSequence(token) {
+      const readout = document.getElementById('stage-readout');
+      if (!(await waitSeconds(3, token))) return;
+      await runPreflights(readout, token);
+      if (!isPlaying || token !== sessionToken) return;
+
+      // Phase 1: Pick 1 of 3 Rotating Departures (with real fallback to departure_1)
+      const depChoice = randomBetween(1, 3);
+      const depKey = `departure_${depChoice}`;
+      setSailboatAtmosphereLevel(0.8, token);
+      readout.textContent = `Phase 1: Boarding the Sailboat (Variant ${depChoice})...`;
+      const playedDep = await playVoicePath(`audio/sailboat/${depKey}.wav`, 0.85, token);
+      if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
+        await playVoicePath('audio/sailboat/departure_1.wav', 0.85, token);
+      }
+
+      // Phase 2: Shuffle 30 Micro-Drifts and deal 18 with progressive random silence gaps
+      // Same dealing/gaps as Rainforest. No SFX cue map exists for Sailboat yet,
+      // so no clipKey is passed — Rainforest cues must never fire on Sailboat clips.
+      const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
+      const tonightDrifts = shuffle(allDrifts).slice(0, 18);
+
+      for (let i = 0; i < tonightDrifts.length; i++) {
+        if (!isPlaying || token !== sessionToken) return;
+        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
+        readout.textContent = `Phase 2: Sailboat Drift (${i + 1}/${tonightDrifts.length}) — Water & Wind`;
+        if (!(await waitSeconds(gap, token))) return;
+        if (i === 0) setSailboatAtmosphereLevel(1.0, token);
+        readout.textContent = `Phase 2: Sailboat Drift (${i + 1}/${tonightDrifts.length})`;
+        await playVoicePath(`audio/sailboat/${tonightDrifts[i]}.wav`, 0.76, token);
+      }
+
+      // Phase 3: Pick 1 of 3 Rotating Lucid Seeds, at softer volume
+      if (!isPlaying || token !== sessionToken) return;
+      setSailboatAtmosphereLevel(0.4, token);
+      readout.textContent = "Phase 3: Deepening Hypnagogia...";
+      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
+      const seedChoice = randomBetween(1, 3);
+      readout.textContent = "Phase 3: Planting Lucid Seed...";
+      await playVoicePath(`audio/sailboat/lucid_seed_${seedChoice}.wav`, 0.55, token);
+
+      fadeOutSoundscape(readout, token);
+    }
+
     // Plays a WAV clip with gentle 180ms fade-in/out envelope and optional described-action SFX cues
     async function playVoicePath(filePath, volume = 0.85, token = sessionToken, clipKey = null) {
       if (!isPlaying || token !== sessionToken) return false;
@@ -789,6 +975,7 @@
       sessionToken++;
       document.getElementById('moon-bus-card').classList.remove('playing');
       document.getElementById('rainforest-card').classList.remove('playing');
+      document.getElementById('sailboat-card').classList.remove('playing');
       document.getElementById('stage-readout').textContent = message;
       if (currentVoiceSource) {
         try { currentVoiceSource.stop(); } catch (e) {}
@@ -801,6 +988,8 @@
       clearTimeout(insectTimeoutId);
       clearTimeout(leafTimeoutId);
       clearTimeout(frogTimeoutId);
+      clearTimeout(sailboatCreakTimeoutId);
+      sailboatWaterGainNode = null; sailboatWindGainNode = null; sailboatCabinGainNode = null;
       rainGainNode = null; insectMasterGain = null; atmosphereLevel = 1.0;
       sfxTimeouts.forEach(clearTimeout);
       sfxTimeouts = [];
@@ -830,6 +1019,10 @@
         document.getElementById('rainforest-card').classList.add('playing');
         startRainforestSoundscape(currentToken);
         runRainforestSequence(currentToken);
+      } else if (portalKey === 'sailboat') {
+        document.getElementById('sailboat-card').classList.add('playing');
+        startSailboatSoundscape(currentToken);
+        runSailboatSequence(currentToken);
       }
     }
   </script>
