@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dream Portals — Portal #2 Test Player</title>
+  <title>Dream Portals — Unified Player</title>
   <style>
     :root {
       --bg: #000000;
@@ -141,7 +141,7 @@
     <button class="pill" id="pill-shuffle" onclick="this.classList.toggle('active')">+ 5m Mind Shuffle</button>
   </div>
 
-  <!-- Portal Cards -->
+  <!-- Unified Portal Roster (1-10) -->
   <div class="portal-grid">
     <div class="portal-card" id="moon-bus-card" onclick="togglePortal('moon_bus')">
       <div class="portal-info">
@@ -154,7 +154,7 @@
     <div class="portal-card rainforest" id="rainforest-card" onclick="togglePortal('rainforest')">
       <div class="portal-info">
         <h2>🚂 Train to the Rainforest</h2>
-        <span>Warm rain on roof • Soft rail rhythm</span>
+        <span>Warm rain on roof • Organic rail rhythm</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -165,11 +165,35 @@
   <script>
     let audioCtx = null;
     let masterGain = null;
+    let rainFilterNode = null;
+    let sharedNoiseBuffer = null;
     let isPlaying = false;
     let activePortal = null;
+    let sessionToken = 0; // Prevents overlapping voices when switching portals
     let currentVoiceSource = null;
     let timerId = null;
-    let trackIntervalId = null;
+    let clackTimeoutId = null;
+    let sfxTimeouts = [];
+
+    // Subtle Described-Action Sound Cue Map for Rainforest Train
+    const RAINFOREST_SFX_CUES = {
+      departure_1: [{ type: 'door_slide', delay: 3.8, gain: 0.11 }],
+      departure_2: [{ type: 'wood_creak', delay: 11.0, gain: 0.08 }],
+      departure_3: [{ type: 'canopy_swell', delay: 12.0, gain: 0.09 }],
+      drift_01: [{ type: 'tree_wind', delay: 1.5, gain: 0.07 }],
+      drift_05: [{ type: 'tree_wind', delay: 1.8, gain: 0.06 }],
+      drift_06: [{ type: 'canopy_swell', delay: 1.0, gain: 0.08 }],
+      drift_08: [{ type: 'tree_wind', delay: 1.5, gain: 0.06 }],
+      drift_10: [{ type: 'wood_creak', delay: 1.2, gain: 0.08 }],
+      drift_11: [{ type: 'bridge_hollow', delay: 1.5, gain: 0.09 }],
+      drift_14: [{ type: 'tree_wind', delay: 1.5, gain: 0.06 }],
+      drift_16: [{ type: 'tree_wind', delay: 2.0, gain: 0.06 }],
+      drift_18: [{ type: 'tree_wind', delay: 1.5, gain: 0.07 }],
+      drift_20: [{ type: 'bridge_hollow', delay: 1.5, gain: 0.07 }],
+      drift_23: [{ type: 'tree_wind', delay: 1.2, gain: 0.07 }],
+      drift_25: [{ type: 'canopy_swell', delay: 1.2, gain: 0.07 }],
+      drift_29: [{ type: 'tree_wind', delay: 1.5, gain: 0.06 }]
+    };
 
     function shuffle(array) {
       const arr = [...array];
@@ -184,7 +208,134 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // 1. Lunar Bus Soundscape (55Hz Sub-Bass + 4Hz Theta Binaural Beat)
+    function createPinkNoiseBuffer(seconds = 18) {
+      const bufferSize = audioCtx.sampleRate * seconds;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.03;
+        b6 = white * 0.115926;
+      }
+      return buffer;
+    }
+
+    // Plays ultra-soft, underneath described-action cues
+    function triggerSubtleCue(type, peakGain = 0.08, token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
+      const now = audioCtx.currentTime;
+
+      if (type === 'door_slide') {
+        // Soft pressurized glass door slide + gentle low latch thud
+        const src = audioCtx.createBufferSource();
+        src.buffer = sharedNoiseBuffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(380, now);
+        filter.frequency.exponentialRampToValueAtTime(160, now + 1.5);
+        filter.Q.value = 2.5;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(peakGain, now + 0.4);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(masterGain);
+        src.start(now);
+        src.stop(now + 1.7);
+
+        // Soft muffled latch thud at 1.45s
+        const latchOsc = audioCtx.createOscillator();
+        const latchGain = audioCtx.createGain();
+        latchOsc.type = 'sine';
+        latchOsc.frequency.setValueAtTime(68, now + 1.45);
+        latchOsc.frequency.exponentialRampToValueAtTime(34, now + 1.65);
+        latchGain.gain.setValueAtTime(0.001, now + 1.45);
+        latchGain.gain.linearRampToValueAtTime(peakGain * 1.1, now + 1.48);
+        latchGain.gain.exponentialRampToValueAtTime(0.001, now + 1.72);
+        latchOsc.connect(latchGain);
+        latchGain.connect(masterGain);
+        latchOsc.start(now + 1.45);
+        latchOsc.stop(now + 1.75);
+
+      } else if (type === 'tree_wind') {
+        // Soft breeze through wet jungle leaves (5.0s)
+        const src = audioCtx.createBufferSource();
+        src.buffer = sharedNoiseBuffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(220, now);
+        filter.frequency.linearRampToValueAtTime(340, now + 2.2);
+        filter.frequency.linearRampToValueAtTime(190, now + 5.0);
+        filter.Q.value = 1.8;
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(peakGain, now + 1.8);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 5.0);
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(masterGain);
+        src.start(now);
+        src.stop(now + 5.1);
+
+      } else if (type === 'wood_creak') {
+        // Warm wooden sleeper-car sway (2.4s)
+        const osc = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(135, now);
+        osc.frequency.linearRampToValueAtTime(98, now + 1.2);
+        osc.frequency.linearRampToValueAtTime(118, now + 2.4);
+
+        filter.type = 'lowpass';
+        filter.frequency.value = 260;
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(peakGain * 0.5, now + 0.8);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 2.4);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + 2.5);
+
+      } else if (type === 'canopy_swell' && rainFilterNode) {
+        // Gentle swell of rain warmth on the glass roof (4.5s)
+        rainFilterNode.frequency.cancelScheduledValues(now);
+        rainFilterNode.frequency.setValueAtTime(rainFilterNode.frequency.value, now);
+        rainFilterNode.frequency.linearRampToValueAtTime(1450, now + 2.0);
+        rainFilterNode.frequency.linearRampToValueAtTime(1050, now + 4.5);
+
+      } else if (type === 'bridge_hollow') {
+        // Deep hollow viaduct resonance (5.5s)
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(48, now);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(peakGain, now + 1.8);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 5.5);
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + 5.6);
+      }
+    }
+
+    // 1. Lunar Bus Soundscape
     function startLunarBusSoundscape() {
       masterGain = audioCtx.createGain();
       masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
@@ -214,8 +365,8 @@
       rightOsc.start();
     }
 
-    // 2. Rainforest Sleeper Train Soundscape (Warm Rain on Roof + Soft Rail Clack + Cabin Hum)
-    function startRainforestSoundscape() {
+    // 2. Rainforest Sleeper Train Soundscape (18s organic rain + LFO + varied rail clack)
+    function startRainforestSoundscape(token) {
       masterGain = audioCtx.createGain();
       masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
       masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4);
@@ -226,7 +377,7 @@
       cabinOsc.type = 'sine';
       cabinOsc.frequency.value = 62;
       const cabinGain = audioCtx.createGain();
-      cabinGain.gain.value = 0.45;
+      cabinGain.gain.value = 0.42;
       cabinOsc.connect(cabinGain);
       cabinGain.connect(masterGain);
       cabinOsc.start();
@@ -245,72 +396,79 @@
       leftOsc.start();
       rightOsc.start();
 
-      // B. Continuous Warm Tropical Rain on Roof (Filtered Pink Noise)
-      const bufferSize = audioCtx.sampleRate * 4;
-      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        b3 = 0.86650 * b3 + white * 0.3104856;
-        b4 = 0.55000 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.0168980;
-        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.03;
-        b6 = white * 0.115926;
-      }
+      // B. 18-Second Non-Repetitive Pink Noise Rain + Slow Breathing LFO
+      sharedNoiseBuffer = createPinkNoiseBuffer(18);
       const rainSource = audioCtx.createBufferSource();
-      rainSource.buffer = noiseBuffer;
+      rainSource.buffer = sharedNoiseBuffer;
       rainSource.loop = true;
 
-      const rainFilter = audioCtx.createBiquadFilter();
-      rainFilter.type = 'lowpass';
-      rainFilter.frequency.value = 1100; // Muffled roof warmth
+      rainFilterNode = audioCtx.createBiquadFilter();
+      rainFilterNode.type = 'lowpass';
+      rainFilterNode.frequency.value = 1050;
+
+      // 0.07Hz LFO (~14s cycle) gently shifts rain warmth so it never sounds static
+      const rainLfo = audioCtx.createOscillator();
+      const rainLfoGain = audioCtx.createGain();
+      rainLfo.type = 'sine';
+      rainLfo.frequency.value = 0.07;
+      rainLfoGain.gain.value = 160;
+      rainLfo.connect(rainLfoGain);
+      rainLfoGain.connect(rainFilterNode.frequency);
+      rainLfo.start();
 
       const rainGain = audioCtx.createGain();
       rainGain.gain.value = 0.55;
-      rainSource.connect(rainFilter);
-      rainFilter.connect(rainGain);
+      rainSource.connect(rainFilterNode);
+      rainFilterNode.connect(rainGain);
       rainGain.connect(masterGain);
       rainSource.start();
 
-      // C. Soft Muffled Rail Clack-Clack (Every 2.4 seconds)
-      function triggerRailClack() {
-        if (!isPlaying || !audioCtx) return;
-        const now = audioCtx.currentTime;
-        [0, 0.22].forEach((offset) => {
-          const osc = audioCtx.createOscillator();
-          const clickGain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(78, now + offset);
-          osc.frequency.exponentialRampToValueAtTime(38, now + offset + 0.07);
+      // C. Organic, Varied Rail Clack-Clack (Drifts between 2.15s and 2.85s with subtle pitch/gain variation)
+      function scheduleNextRailClack() {
+        if (!isPlaying || token !== sessionToken || !audioCtx) return;
+        const nextDelayMs = randomBetween(2150, 2850);
+        clackTimeoutId = setTimeout(() => {
+          if (!isPlaying || token !== sessionToken || !audioCtx) return;
+          const now = audioCtx.currentTime;
+          const baseFreq = randomBetween(73, 82);
+          const pairGap = 0.20 + Math.random() * 0.05;
+          const clackStrength = 0.10 + Math.random() * 0.04;
 
-          clickGain.gain.setValueAtTime(0.001, now + offset);
-          clickGain.gain.linearRampToValueAtTime(0.14, now + offset + 0.01);
-          clickGain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.09);
+          [0, pairGap].forEach((offset, idx) => {
+            const osc = audioCtx.createOscillator();
+            const clickGain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(baseFreq - idx * 4, now + offset);
+            osc.frequency.exponentialRampToValueAtTime(36, now + offset + 0.075);
 
-          osc.connect(clickGain);
-          clickGain.connect(masterGain);
-          osc.start(now + offset);
-          osc.stop(now + offset + 0.1);
-        });
+            clickGain.gain.setValueAtTime(0.001, now + offset);
+            clickGain.gain.linearRampToValueAtTime(clackStrength, now + offset + 0.012);
+            clickGain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.095);
+
+            osc.connect(clickGain);
+            clickGain.connect(masterGain);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.11);
+          });
+
+          scheduleNextRailClack();
+        }, nextDelayMs);
       }
-      trackIntervalId = setInterval(triggerRailClack, 2400);
+      scheduleNextRailClack();
     }
 
-    // Plays any WAV file through the 2800Hz Low-Pass Warmth Filter
-    async function playVoicePath(filePath, volume = 0.85) {
-      if (!isPlaying) return;
+    // Plays a WAV clip with gentle 180ms fade-in/out envelope and optional described-action SFX cues
+    async function playVoicePath(filePath, volume = 0.85, token = sessionToken, clipKey = null) {
+      if (!isPlaying || token !== sessionToken) return false;
       try {
         const response = await fetch(filePath);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const arrayBuffer = await response.arrayBuffer();
+        if (!isPlaying || token !== sessionToken || !audioCtx) return false;
         const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 
         return new Promise((resolve) => {
-          if (!isPlaying) return resolve();
+          if (!isPlaying || token !== sessionToken || !audioCtx) return resolve(false);
 
           const source = audioCtx.createBufferSource();
           source.buffer = audioBuffer;
@@ -319,146 +477,172 @@
           lowpass.type = 'lowpass';
           lowpass.frequency.value = 2800;
 
+          // Smooth 180ms fade-in and fade-out envelope on the voice
           const voiceGain = audioCtx.createGain();
-          voiceGain.gain.value = volume;
+          const now = audioCtx.currentTime;
+          const dur = audioBuffer.duration;
+          const fadeSec = Math.min(0.18, dur * 0.2);
+
+          voiceGain.gain.setValueAtTime(0.001, now);
+          voiceGain.gain.linearRampToValueAtTime(volume, now + fadeSec);
+          if (dur > fadeSec * 2) {
+            voiceGain.gain.setValueAtTime(volume, now + dur - fadeSec);
+            voiceGain.gain.linearRampToValueAtTime(0.001, now + dur);
+          }
 
           source.connect(lowpass);
           lowpass.connect(voiceGain);
           voiceGain.connect(audioCtx.destination);
 
+          // Schedule any subtle described-action sound cues for this clip
+          if (clipKey && RAINFOREST_SFX_CUES[clipKey]) {
+            RAINFOREST_SFX_CUES[clipKey].forEach((cue) => {
+              const tid = setTimeout(() => {
+                triggerSubtleCue(cue.type, cue.gain, token);
+              }, cue.delay * 1000);
+              sfxTimeouts.push(tid);
+            });
+          }
+
           currentVoiceSource = source;
-          source.onended = () => resolve();
+          source.onended = () => resolve(true);
           source.start();
         });
       } catch (e) {
         console.warn(`Skipped missing clip: ${filePath}`);
+        return false;
       }
     }
 
-    function waitSeconds(sec) {
+    function waitSeconds(sec, token) {
       return new Promise((resolve) => {
-        timerId = setTimeout(resolve, sec * 1000);
+        timerId = setTimeout(() => {
+          resolve(isPlaying && token === sessionToken);
+        }, sec * 1000);
       });
     }
 
-    // Runs optional Pre-Flight warm-ups if their pills are active
-    async function runPreflights(readout) {
+    async function runPreflights(readout, token) {
       const unwindActive = document.getElementById('pill-unwind').classList.contains('active');
       const shuffleActive = document.getElementById('pill-shuffle').classList.contains('active');
 
-      if (unwindActive && isPlaying) {
+      if (unwindActive && isPlaying && token === sessionToken) {
         for (let i = 1; i <= 10; i++) {
-          if (!isPlaying) return;
+          if (!isPlaying || token !== sessionToken) return;
           const stepNum = String(i).padStart(2, '0');
           readout.textContent = `Pre-Flight: Body Unwind (${i}/10)`;
-          await playVoicePath(`audio/preflight/body_unwind/step_${stepNum}.wav`, 0.82);
-          if (!isPlaying) return;
-          await waitSeconds(8);
+          await playVoicePath(`audio/preflight/body_unwind/step_${stepNum}.wav`, 0.82, token);
+          if (!isPlaying || token !== sessionToken) return;
+          await waitSeconds(randomBetween(7, 10), token);
         }
       }
 
-      if (shuffleActive && isPlaying) {
+      if (shuffleActive && isPlaying && token === sessionToken) {
         const pool = Array.from({ length: 40 }, (_, i) => String(i + 1).padStart(2, '0'));
         const tonightObjects = shuffle(pool).slice(0, 25);
         for (let i = 0; i < tonightObjects.length; i++) {
-          if (!isPlaying) return;
+          if (!isPlaying || token !== sessionToken) return;
           readout.textContent = `Pre-Flight: Mind Shuffle (${i + 1}/25)`;
-          await playVoicePath(`audio/preflight/mind_shuffle/obj_${tonightObjects[i]}.wav`, 0.78);
-          if (!isPlaying) return;
-          await waitSeconds(randomBetween(6, 10));
+          await playVoicePath(`audio/preflight/mind_shuffle/obj_${tonightObjects[i]}.wav`, 0.78, token);
+          if (!isPlaying || token !== sessionToken) return;
+          await waitSeconds(randomBetween(6, 10), token);
         }
       }
     }
 
-    async function runMoonBusSequence() {
+    async function runMoonBusSequence(token) {
       const readout = document.getElementById('stage-readout');
-      await waitSeconds(3);
-      await runPreflights(readout);
-      if (!isPlaying) return;
+      if (!(await waitSeconds(3, token))) return;
+      await runPreflights(readout, token);
+      if (!isPlaying || token !== sessionToken) return;
 
       readout.textContent = "Phase 1: Boarding & Grounding...";
-      await playVoicePath('audio/moon_bus/departure.wav', 0.85);
+      await playVoicePath('audio/moon_bus/departure.wav', 0.85, token);
 
       const driftClips = shuffle(['drift_1', 'drift_2', 'drift_3', 'drift_4', 'drift_5', 'drift_6']);
       for (let i = 0; i < driftClips.length; i++) {
-        if (!isPlaying) return;
-        const pause = randomBetween(11, 18);
+        if (!isPlaying || token !== sessionToken) return;
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length}) — Ambient Pause`;
-        await waitSeconds(pause);
-        if (!isPlaying) return;
+        if (!(await waitSeconds(randomBetween(12, 19), token))) return;
         readout.textContent = `Phase 2: Lunar Drift (${i + 1}/${driftClips.length})`;
-        await playVoicePath(`audio/moon_bus/${driftClips[i]}.wav`, 0.78);
+        await playVoicePath(`audio/moon_bus/${driftClips[i]}.wav`, 0.78, token);
       }
 
-      if (!isPlaying) return;
+      if (!isPlaying || token !== sessionToken) return;
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      await waitSeconds(20);
-      if (!isPlaying) return;
+      if (!(await waitSeconds(randomBetween(20, 26), token))) return;
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath('audio/moon_bus/lucid_seed.wav', 0.55);
+      await playVoicePath('audio/moon_bus/lucid_seed.wav', 0.55, token);
 
-      fadeOutSoundscape(readout);
+      fadeOutSoundscape(readout, token);
     }
 
-    async function runRainforestSequence() {
+    async function runRainforestSequence(token) {
       const readout = document.getElementById('stage-readout');
-      await waitSeconds(3);
-      await runPreflights(readout);
-      if (!isPlaying) return;
+      if (!(await waitSeconds(3, token))) return;
+      await runPreflights(readout, token);
+      if (!isPlaying || token !== sessionToken) return;
 
-      // Phase 1: Pick 1 of 3 Rotating Departures (fallback to departure_1 if others aren't rendered yet)
+      // Phase 1: Pick 1 of 3 Rotating Departures (with real fallback to departure_1)
       const depChoice = randomBetween(1, 3);
+      const depKey = `departure_${depChoice}`;
       readout.textContent = `Phase 1: Boarding Sleeper Car (Variant ${depChoice})...`;
-      await playVoicePath(`audio/rainforest/departure_${depChoice}.wav`, 0.85);
+      const playedDep = await playVoicePath(`audio/rainforest/${depKey}.wav`, 0.85, token, depKey);
+      if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
+        await playVoicePath('audio/rainforest/departure_1.wav', 0.85, token, 'departure_1');
+      }
 
       // Phase 2: Shuffle 30 Micro-Drifts and deal 18 with progressive random silence gaps
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
 
       for (let i = 0; i < tonightDrifts.length; i++) {
-        if (!isPlaying) return;
-        const gap = i < 8 ? randomBetween(9, 16) : randomBetween(16, 26);
+        if (!isPlaying || token !== sessionToken) return;
+        const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length}) — Rain & Rails`;
-        await waitSeconds(gap);
-        if (!isPlaying) return;
+        if (!(await waitSeconds(gap, token))) return;
+        const clipKey = tonightDrifts[i];
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/rainforest/${tonightDrifts[i]}.wav`, 0.76);
+        await playVoicePath(`audio/rainforest/${clipKey}.wav`, 0.76, token, clipKey);
       }
 
       // Phase 3: Pick 1 of 3 Rotating Lucid Seeds
-      if (!isPlaying) return;
+      if (!isPlaying || token !== sessionToken) return;
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
-      await waitSeconds(24);
-      if (!isPlaying) return;
+      if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/rainforest/lucid_seed_${seedChoice}.wav`, 0.55);
+      await playVoicePath(`audio/rainforest/lucid_seed_${seedChoice}.wav`, 0.55, token);
 
-      fadeOutSoundscape(readout);
+      fadeOutSoundscape(readout, token);
     }
 
-    function fadeOutSoundscape(readout) {
-      if (!isPlaying || !audioCtx || !masterGain) return;
+    function fadeOutSoundscape(readout, token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx || !masterGain) return;
       readout.textContent = "Phase 4: 8-Minute Soundscape Fade to Silence";
-      const fadeSeconds = 480; // 8 minutes
+      const fadeSeconds = 480;
       masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
       masterGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + fadeSeconds);
       timerId = setTimeout(() => {
-        if (isPlaying) stopSession("Session complete — Goodnight");
+        if (isPlaying && token === sessionToken) stopSession("Session complete — Goodnight");
       }, fadeSeconds * 1000);
     }
 
     function stopSession(message = "Session paused") {
       isPlaying = false;
       activePortal = null;
+      sessionToken++;
       document.getElementById('moon-bus-card').classList.remove('playing');
       document.getElementById('rainforest-card').classList.remove('playing');
       document.getElementById('stage-readout').textContent = message;
       if (currentVoiceSource) {
         try { currentVoiceSource.stop(); } catch (e) {}
+        currentVoiceSource = null;
       }
       clearTimeout(timerId);
-      clearInterval(trackIntervalId);
+      clearTimeout(clackTimeoutId);
+      sfxTimeouts.forEach(clearTimeout);
+      sfxTimeouts = [];
       if (audioCtx) {
         audioCtx.close();
         audioCtx = null;
@@ -474,16 +658,17 @@
 
       isPlaying = true;
       activePortal = portalKey;
+      const currentToken = ++sessionToken;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
       if (portalKey === 'moon_bus') {
         document.getElementById('moon-bus-card').classList.add('playing');
         startLunarBusSoundscape();
-        runMoonBusSequence();
+        runMoonBusSequence(currentToken);
       } else if (portalKey === 'rainforest') {
         document.getElementById('rainforest-card').classList.add('playing');
-        startRainforestSoundscape();
-        runRainforestSequence();
+        startRainforestSoundscape(currentToken);
+        runRainforestSequence(currentToken);
       }
     }
   </script>
