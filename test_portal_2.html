@@ -174,6 +174,12 @@
     let timerId = null;
     let clackTimeoutId = null;
     let sfxTimeouts = [];
+    let rainGainNode = null;
+    let insectMasterGain = null;
+    let insectTimeoutId = null;
+    let leafTimeoutId = null;
+    let frogTimeoutId = null;
+    let atmosphereLevel = 1.0;
 
     // Subtle Described-Action Sound Cue Map for Rainforest Train
     const RAINFOREST_SFX_CUES = {
@@ -335,6 +341,105 @@
       }
     }
 
+
+    // --- Living Rainforest Atmosphere (v3, procedural test-grade) ---
+    // Soft insects, leaf rustle, sparse frog — all underneath, never loud.
+    // atmosphereLevel scales them by phase: preflight 0.5, departure 0.8, drifts 1.0, lucid 0.4.
+    function setAtmosphereLevel(level, token) {
+      if (token !== sessionToken) return;
+      atmosphereLevel = level;
+      if (rainGainNode && audioCtx) {
+        const now = audioCtx.currentTime;
+        // Rain base 0.55, scaled 0.45 (preflight) to 0.62 (drifts) — keep it gentle
+        const rainTarget = 0.35 + level * 0.27;
+        rainGainNode.gain.cancelScheduledValues(now);
+        rainGainNode.gain.setValueAtTime(rainGainNode.gain.value, now);
+        rainGainNode.gain.linearRampToValueAtTime(rainTarget, now + 3);
+      }
+      if (insectMasterGain && audioCtx) {
+        const now = audioCtx.currentTime;
+        insectMasterGain.gain.cancelScheduledValues(now);
+        insectMasterGain.gain.setValueAtTime(insectMasterGain.gain.value, now);
+        insectMasterGain.gain.linearRampToValueAtTime(0.06 * level, now + 3);
+      }
+    }
+
+    function scheduleInsectChirps(token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx) return;
+      const nextMs = randomBetween(1200, 3600);
+      insectTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !insectMasterGain) { scheduleInsectChirps(token); return; }
+        const now = audioCtx.currentTime;
+        const pulses = randomBetween(3, 5);
+        const baseFreq = 4200 + Math.random() * 900;
+        const panVal = (Math.random() * 2 - 1) * 0.7;
+        for (let i = 0; i < pulses; i++) {
+          const t = now + i * 0.14;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(baseFreq, t);
+          osc.frequency.linearRampToValueAtTime(baseFreq * 0.92, t + 0.08);
+          g.gain.setValueAtTime(0.001, t);
+          g.gain.linearRampToValueAtTime(0.028 * atmosphereLevel, t + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+          osc.connect(g);
+          try {
+            const pan = audioCtx.createStereoPanner();
+            pan.pan.value = panVal;
+            g.connect(pan); pan.connect(insectMasterGain);
+          } catch (e) { g.connect(insectMasterGain); }
+          osc.start(t); osc.stop(t + 0.11);
+        }
+        scheduleInsectChirps(token);
+      }, nextMs);
+    }
+
+    function scheduleLeafRustle(token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx) return;
+      const nextMs = randomBetween(9000, 18000);
+      leafTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !sharedNoiseBuffer || !insectMasterGain) { scheduleLeafRustle(token); return; }
+        const now = audioCtx.currentTime;
+        const src = audioCtx.createBufferSource();
+        src.buffer = sharedNoiseBuffer;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(450 + Math.random() * 300, now);
+        filter.frequency.linearRampToValueAtTime(850, now + 1.2);
+        filter.frequency.linearRampToValueAtTime(500, now + 2.5);
+        filter.Q.value = 1.2;
+        const g = audioCtx.createGain();
+        g.gain.setValueAtTime(0.001, now);
+        g.gain.linearRampToValueAtTime(0.03 * atmosphereLevel, now + 0.9);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 2.6);
+        src.connect(filter); filter.connect(g); g.connect(insectMasterGain);
+        src.start(now); src.stop(now + 2.7);
+        scheduleLeafRustle(token);
+      }, nextMs);
+    }
+
+    function scheduleFrog(token) {
+      if (!isPlaying || token !== sessionToken || !audioCtx) return;
+      const nextMs = randomBetween(20000, 40000);
+      frogTimeoutId = setTimeout(() => {
+        if (!isPlaying || token !== sessionToken || !audioCtx || !insectMasterGain) { scheduleFrog(token); return; }
+        const now = audioCtx.currentTime;
+        [0, 0.35].forEach((off) => {
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(170 + Math.random() * 30, now + off);
+          g.gain.setValueAtTime(0.001, now + off);
+          g.gain.linearRampToValueAtTime(0.016 * atmosphereLevel, now + off + 0.05);
+          g.gain.exponentialRampToValueAtTime(0.001, now + off + 0.28);
+          osc.connect(g); g.connect(insectMasterGain);
+          osc.start(now + off); osc.stop(now + off + 0.3);
+        });
+        scheduleFrog(token);
+      }, nextMs);
+    }
+
     // 1. Lunar Bus Soundscape
     function startLunarBusSoundscape() {
       masterGain = audioCtx.createGain();
@@ -417,7 +522,11 @@
       rainLfo.start();
 
       const rainGain = audioCtx.createGain();
-      rainGain.gain.value = 0.55;
+      rainGain.gain.value = 0.45;
+      rainGainNode = rainGain;
+      insectMasterGain = audioCtx.createGain();
+      insectMasterGain.gain.value = 0.03;
+      insectMasterGain.connect(masterGain);
       rainSource.connect(rainFilterNode);
       rainFilterNode.connect(rainGain);
       rainGain.connect(masterGain);
@@ -455,6 +564,10 @@
         }, nextDelayMs);
       }
       scheduleNextRailClack();
+      setAtmosphereLevel(0.5, token);
+      scheduleInsectChirps(token);
+      scheduleLeafRustle(token);
+      scheduleFrog(token);
     }
 
     // Plays a WAV clip with gentle 180ms fade-in/out envelope and optional described-action SFX cues
@@ -586,6 +699,7 @@
       // Phase 1: Pick 1 of 3 Rotating Departures (with real fallback to departure_1)
       const depChoice = randomBetween(1, 3);
       const depKey = `departure_${depChoice}`;
+      setAtmosphereLevel(0.8, token);
       readout.textContent = `Phase 1: Boarding Sleeper Car (Variant ${depChoice})...`;
       const playedDep = await playVoicePath(`audio/rainforest/${depKey}.wav`, 0.85, token, depKey);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
@@ -601,6 +715,7 @@
         const gap = i < 8 ? randomBetween(10, 17) : randomBetween(17, 28);
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length}) — Rain & Rails`;
         if (!(await waitSeconds(gap, token))) return;
+        if (i === 0) setAtmosphereLevel(1.0, token);
         const clipKey = tonightDrifts[i];
         readout.textContent = `Phase 2: Rainforest Drift (${i + 1}/${tonightDrifts.length})`;
         await playVoicePath(`audio/rainforest/${clipKey}.wav`, 0.76, token, clipKey);
@@ -608,6 +723,7 @@
 
       // Phase 3: Pick 1 of 3 Rotating Lucid Seeds
       if (!isPlaying || token !== sessionToken) return;
+      setAtmosphereLevel(0.4, token);
       readout.textContent = "Phase 3: Deepening Hypnagogia...";
       if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
@@ -641,6 +757,10 @@
       }
       clearTimeout(timerId);
       clearTimeout(clackTimeoutId);
+      clearTimeout(insectTimeoutId);
+      clearTimeout(leafTimeoutId);
+      clearTimeout(frogTimeoutId);
+      rainGainNode = null; insectMasterGain = null; atmosphereLevel = 1.0;
       sfxTimeouts.forEach(clearTimeout);
       sfxTimeouts = [];
       if (audioCtx) {
