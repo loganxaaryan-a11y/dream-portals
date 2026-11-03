@@ -209,7 +209,21 @@
       }
       .portal-card:hover { transform: none; }
     }
-  </style>
+  dialog { position:fixed; inset:0; margin:0; width:100%; height:100%; max-width:none; max-height:none; background:black; color:#dae0fb; border:0; }
+dialog::backdrop { background:#000 }
+#veil { position:absolute; inset:0; width:100%; height:100%; border:0; background:transparent; }
+#scene { position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity 1.5s; background:radial-gradient(ellipse at 65% 32%,var(--glow,#48578e),transparent 35%),linear-gradient(150deg,#171c35,#050611 65%); }
+#night[data-mode="immersive"] #scene { opacity:var(--brightness,.55) }
+#scene::after {content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 25% 88%,#324457,transparent 50%);}
+@media (prefers-reduced-motion:no-preference) {
+#night.moving[data-mode="immersive"] #scene::after { animation:drift 18s ease-in-out infinite alternate }
+@keyframes drift { to { transform:translateY(-5%) } }
+}
+#controls {position:absolute;bottom:max(8vh,32px);left:50%;transform:translateX(-50%);width:min(92%,410px);text-align:center;background:#10121e;padding:20px;border-radius:18px;}
+#controls>* {margin:6px}
+#controls select, .display-choice select {color:inherit;background:#171927;border:1px solid #555978;padding:8px;border-radius:8px;}
+.display-choice {margin-bottom:18px;}
+</style>
 </head>
 <body>
 
@@ -218,6 +232,15 @@
     <p>Tap a destination and close your eyes</p>
   </div>
 
+  <label class="display-choice">During playback <select id="displayMode"><option value="sleep">Sleep · black screen</option><option value="immersive">Immersive · ambient light</option></select></label>
+  <dialog id="night" aria-labelledby="destination">
+    <div id="scene"></div><button id="veil" aria-label="Show playback controls"></button>
+    <section id="controls"><h2 id="destination"></h2>
+    <label>Display <select id="sessionMode"></select></label>
+    <div id="visualOptions"><label>Brightness <input id="brightness" type="range" min="5" max="100" value="55"></label>
+    <label><input type="checkbox" id="motion"> Gentle motion</label></div>
+    <button class="pill" id="hide">Hide controls</button><button class="pill" id="end">End journey</button></section>
+  </dialog>
   <!-- Optional Pre-Flight Add-On Toggles -->
   <div class="toggles">
     <button class="pill" id="pill-unwind" onclick="this.classList.toggle('active')">+ 3m Body Unwind</button>
@@ -1657,6 +1680,8 @@
     }
 
     function stopSession(message = "Session paused") {
+      clearTimeout(revealTimer);
+      if (night.open) night.close();
       isPlaying = false;
       activePortal = null;
       sessionToken++;
@@ -1700,6 +1725,50 @@
       }
     }
 
+    const night = document.querySelector('#night');
+    const mode = document.querySelector('#displayMode');
+    const sessionMode = document.querySelector('#sessionMode');
+    const controls = document.querySelector('#controls');
+    const veil = document.querySelector('#veil');
+    const brightness = document.querySelector('#brightness');
+    const motion = document.querySelector('#motion');
+    sessionMode.innerHTML = mode.innerHTML;
+    try {
+      const saved = JSON.parse(localStorage.getItem('dream-display') || '{}');
+      mode.value = saved.mode === 'immersive' ? 'immersive' : 'sleep';
+      brightness.value = saved.brightness || 55;
+      motion.checked = saved.motion === true;
+    } catch {}
+    function applyDisplay() {
+      sessionMode.value = mode.value;
+      night.dataset.mode = mode.value;
+      night.classList.toggle('moving', motion.checked);
+      night.style.setProperty('--brightness', brightness.value / 100);
+      document.querySelector('#visualOptions').hidden = mode.value === 'sleep';
+      try { localStorage.setItem('dream-display', JSON.stringify({mode:mode.value, brightness:brightness.value, motion:motion.checked})); } catch {}
+    }
+    mode.onchange = brightness.oninput = motion.onchange = applyDisplay;
+    sessionMode.onchange = () => { mode.value = sessionMode.value; applyDisplay(); };
+    applyDisplay();
+    function hideControls() { controls.hidden = true; veil.focus(); }
+    function scheduleHide() {
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(hideControls, 6000);
+    }
+    veil.onclick = () => { controls.hidden = false; sessionMode.focus(); scheduleHide(); };
+    document.querySelector('#hide').onclick = hideControls;
+    document.querySelector('#end').onclick = () => stopSession('Journey ended');
+    night.oncancel = event => { event.preventDefault(); veil.click(); };
+    let revealTimer;
+    function openNight() {
+      const card = document.querySelector('.portal-card.playing');
+      document.querySelector('#destination').textContent = card.querySelector('h2').textContent;
+      night.style.setProperty('--glow', getComputedStyle(card, '::before').backgroundColor);
+      controls.hidden = false;
+      night.showModal();
+      revealTimer = setTimeout(hideControls, 3000);
+    }
+    controls.onpointerdown = controls.onkeydown = controls.oninput = scheduleHide;
     function togglePortal(portalKey) {
       if (isPlaying) {
         const wasSame = activePortal === portalKey;
@@ -1754,6 +1823,7 @@
         startNebulaSoundscape(currentToken);
         runNebulaSequence(currentToken);
       }
+      openNight();
     }
   </script>
 </body>
