@@ -1142,8 +1142,8 @@ dialog::backdrop { background:#000 }
     // 2. 320 Hz timber thrum (brown noise)  3. 64 Hz loft resonance  4. hearth embers, low-passed 600 Hz, every 15-30s
     function setAtticAtmosphereLevel(level, token) {
       if (token !== sessionToken || !audioCtx) return; atmosphereLevel = level; const now = audioCtx.currentTime;
-      if (atticRainGainNode) { atticRainGainNode.gain.cancelScheduledValues(now); atticRainGainNode.gain.setValueAtTime(atticRainGainNode.gain.value, now); atticRainGainNode.gain.linearRampToValueAtTime(0.16 + level * 0.30, now + 3); }
-      if (atticTimberGainNode) { atticTimberGainNode.gain.cancelScheduledValues(now); atticTimberGainNode.gain.setValueAtTime(atticTimberGainNode.gain.value, now); atticTimberGainNode.gain.linearRampToValueAtTime(0.10 + level * 0.15, now + 3); }
+      if (atticRainGainNode) { atticRainGainNode.gain.cancelScheduledValues(now); atticRainGainNode.gain.setValueAtTime(atticRainGainNode.gain.value, now); atticRainGainNode.gain.linearRampToValueAtTime(0.11 + level * 0.21, now + 3); }
+      if (atticTimberGainNode) { atticTimberGainNode.gain.cancelScheduledValues(now); atticTimberGainNode.gain.setValueAtTime(atticTimberGainNode.gain.value, now); atticTimberGainNode.gain.linearRampToValueAtTime(0.075 + level * 0.11, now + 3); }
       if (atticResGainNode) { atticResGainNode.gain.cancelScheduledValues(now); atticResGainNode.gain.setValueAtTime(atticResGainNode.gain.value, now); atticResGainNode.gain.linearRampToValueAtTime(0.05 + level * 0.05, now + 3); }
     }
     function scheduleAtticHearth(token) {
@@ -1157,8 +1157,8 @@ dialog::backdrop { background:#000 }
     function startAtticSoundscape(token) {
       masterGain = audioCtx.createGain(); masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime); masterGain.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 4); masterGain.connect(bedMidFilter);
       sharedNoiseBuffer = createPinkNoiseBuffer(18); sharedBrownBuffer = createBrownNoiseBuffer(18);
-      const rain = audioCtx.createBufferSource(); rain.buffer = sharedNoiseBuffer; rain.loop = true; const rf = audioCtx.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 1350; atticRainGainNode = audioCtx.createGain(); atticRainGainNode.gain.value = 0.50; rain.connect(rf); rf.connect(atticRainGainNode); atticRainGainNode.connect(masterGain); rain.start();
-      const timber = audioCtx.createBufferSource(); timber.buffer = sharedBrownBuffer; timber.loop = true; const tf = audioCtx.createBiquadFilter(); tf.type = 'lowpass'; tf.frequency.value = 320; atticTimberGainNode = audioCtx.createGain(); atticTimberGainNode.gain.value = 0.20; timber.connect(tf); tf.connect(atticTimberGainNode); atticTimberGainNode.connect(masterGain); timber.start();
+      const rain = audioCtx.createBufferSource(); rain.buffer = sharedNoiseBuffer; rain.loop = true; const rf = audioCtx.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 1350; atticRainGainNode = audioCtx.createGain(); atticRainGainNode.gain.value = 0.35; rain.connect(rf); rf.connect(atticRainGainNode); atticRainGainNode.connect(masterGain); rain.start();
+      const timber = audioCtx.createBufferSource(); timber.buffer = sharedBrownBuffer; timber.loop = true; const tf = audioCtx.createBiquadFilter(); tf.type = 'lowpass'; tf.frequency.value = 320; atticTimberGainNode = audioCtx.createGain(); atticTimberGainNode.gain.value = 0.15; timber.connect(tf); tf.connect(atticTimberGainNode); atticTimberGainNode.connect(masterGain); timber.start();
       const res = audioCtx.createOscillator(); res.type = 'sine'; res.frequency.value = 64; atticResGainNode = audioCtx.createGain(); atticResGainNode.gain.value = 0.08; res.connect(atticResGainNode); atticResGainNode.connect(masterGain); res.start();
       setAtticAtmosphereLevel(0.5, token); atticLatePhase = false; scheduleAtticHearth(token);
     }
@@ -1366,9 +1366,9 @@ dialog::backdrop { background:#000 }
       const depKey = `departure_${depChoice}`;
       setAtticAtmosphereLevel(0.80, token); setEyelidPhase('departure', token);
       readout.textContent = `Phase 1: Boarding Attic Rain-Loft Library (Variant ${depChoice})...`;
-      const playedDep = await playVoicePath(`audio/attic_library/${depKey}.wav`, 0.85, token, null, null, 2950);
+      const playedDep = await playVoicePath(`audio/attic_library_blend_test/${depKey}.wav`, 0.76, token, null, null, 3500);
       if (!playedDep && depChoice !== 1 && isPlaying && token === sessionToken) {
-        await playVoicePath('audio/attic_library/departure_1.wav', 0.85, token, null, null, 2950);
+        await playVoicePath('audio/attic_library_blend_test/departure_1.wav', 0.76, token, null, null, 3500);
       }
       const allDrifts = Array.from({ length: 30 }, (_, i) => `drift_${String(i + 1).padStart(2, '0')}`);
       const tonightDrifts = shuffle(allDrifts).slice(0, 18);
@@ -1380,7 +1380,7 @@ dialog::backdrop { background:#000 }
         if (i === 0) { setAtticAtmosphereLevel(1.0, token); setEyelidPhase('early', token); }
         if (i === 8) { setAtticAtmosphereLevel(0.80, token); setEyelidPhase('late', token); atticLatePhase = true; }
         readout.textContent = `Phase 2: Attic Rain-Loft Library Drift (${i + 1}/${tonightDrifts.length})`;
-        await playVoicePath(`audio/attic_library/${tonightDrifts[i]}.wav`, 0.76, token, null, null, 2950);
+        await playVoicePath(`audio/attic_library_blend_test/${tonightDrifts[i]}.wav`, 0.68, token, null, null, 3500);
       }
       if (!isPlaying || token !== sessionToken) return;
       setAtticAtmosphereLevel(0.40, token); setEyelidPhase('lucid', token);
@@ -1388,7 +1388,7 @@ dialog::backdrop { background:#000 }
       if (!(await waitSeconds(randomBetween(22, 28), token))) return;
       const seedChoice = randomBetween(1, 3);
       readout.textContent = "Phase 3: Planting Lucid Seed...";
-      await playVoicePath(`audio/attic_library/lucid_seed_${seedChoice}.wav`, 0.55, token, null, null, 2950);
+      await playVoicePath(`audio/attic_library_blend_test/lucid_seed_${seedChoice}.wav`, 0.50, token, null, null, 3500);
       fadeOutSoundscape(readout, token);
     }
 
